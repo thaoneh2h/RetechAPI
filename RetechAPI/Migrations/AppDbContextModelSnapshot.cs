@@ -69,7 +69,7 @@ namespace RetechAPI.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 #pragma warning restore 612, 618
         }
