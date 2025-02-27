@@ -12,8 +12,8 @@ using RetechAPI.Models;
 namespace RetechAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250221062826_FirstDefault")]
-    partial class FirstDefault
+    [Migration("20250227072738_firtsCreate")]
+    partial class firtsCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

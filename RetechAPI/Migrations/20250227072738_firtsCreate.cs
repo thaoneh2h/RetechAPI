@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RetechAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstDefault : Migration
+    public partial class firtsCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,7 +1,10 @@
-﻿namespace RetechAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RetechAPI.Models
 {
     public class Voucher
     {
+        [Key]
         public Guid VoucherId { get; set; }
         public Guid UserId { get; set; } // Người sở hữu voucher
         public decimal DiscountValue { get; set; } // Giá trị giảm giá
@@ -9,5 +12,9 @@
         public DateTime ValidFrom { get; set; } 
         public DateTime ValidTo { get; set; } 
         public string Status { get; set; } // Enum: Active, Expired
+        // Relationships
+        public User User { get; set; }
+        public Order Order { get; set; }
+        public ICollection<TransactionHistory> TransactionHistory { get; set; }
     }
 }
