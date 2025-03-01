@@ -33,6 +33,6 @@ namespace RetechAPI.Models
         public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
         public ICollection<Notification> Notification { get; set; } = new List<Notification>();
         public ICollection<DeviceVerification> DeviceVerification { get; set; } = new List<DeviceVerification>();
-
+        public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
     }
 }

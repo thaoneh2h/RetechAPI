@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using RetechAPI.DTOS;
 using RetechAPI.Models;
+using RetechAPI.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,19 +10,21 @@ namespace RetechAPI.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthService(AppDbContext context, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration)
         {
-            _context = context;
+            _userRepository = userRepository;
             _configuration = configuration;
         }
 
+        // Đăng ký người dùng mới
         public async Task<string> RegisterAsync(RegisterDTO model)
         {
             // Kiểm tra nếu người dùng đã tồn tại
-            if (await _context.User.AnyAsync(u => u.UserName == model.UserName))
+            var existingUser = await _userRepository.GetUserByNameAsync(model.UserName);
+            if (existingUser != null)
             {
                 throw new Exception("Username is already taken");
             }
@@ -33,16 +36,15 @@ namespace RetechAPI.Services
                 Password = BCrypt.Net.BCrypt.HashPassword(model.Password) // Mã hóa mật khẩu
             };
 
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddUserAsync(user);
 
             return GenerateJwtToken(user);
         }
 
+        // Đăng nhập người dùng
         public async Task<string> LoginAsync(LoginDTO model)
         {
-            var user = await _context.User.SingleOrDefaultAsync(u => u.UserName == model.UserName);
-
+            var user = await _userRepository.GetUserByNameAsync(model.UserName);
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
@@ -51,6 +53,7 @@ namespace RetechAPI.Services
             return GenerateJwtToken(user);
         }
 
+        // Tạo JWT token
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
@@ -79,4 +82,5 @@ namespace RetechAPI.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
+
 }

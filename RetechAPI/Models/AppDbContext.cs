@@ -27,7 +27,7 @@ namespace RetechAPI.Models
         public DbSet<E_Wallet> EWallet { get; set; }
         public DbSet<DeviceVerification> DeviceVerification { get; set; }
         public DbSet<Category> Category { get; set; }
-
+        public DbSet<UserAddress> UserAddresses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // User - Product (One User has many Products)
@@ -43,6 +43,25 @@ namespace RetechAPI.Models
                 .WithMany(c => c.Product) // Một danh mục có thể chứa nhiều sản phẩm
                 .HasForeignKey(p => p.CategoryId) // Khóa ngoại ở Product
                 .OnDelete(DeleteBehavior.Restrict); // Nếu xóa Category, không tự động xóa các sản phẩm
+            modelBuilder.Entity<UserAddress>()
+                .Property(ua => ua.AddressLine1)
+                .IsRequired(); // Địa chỉ phải có
+
+            modelBuilder.Entity<UserAddress>()
+                .Property(ua => ua.Ward)
+                .IsRequired();
+
+            modelBuilder.Entity<UserAddress>()
+                .Property(ua => ua.District)
+                .IsRequired();
+
+            modelBuilder.Entity<UserAddress>()
+                .Property(ua => ua.City)
+                .IsRequired();
+
+            modelBuilder.Entity<UserAddress>()
+                .Property(ua => ua.Country)
+                .HasDefaultValue("Vietnam");
 
             // User - ExchangeRequest (One User can offer many ExchangeRequests)
             modelBuilder.Entity<ExchangeRequest>()
