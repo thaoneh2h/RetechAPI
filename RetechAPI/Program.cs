@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using RetechAPI.Models;
-using RetechAPI.Services;
-using RetechAPI.Repositories;
+using Retech.Application.Services;
+using Retech.DataAccess.Repositories;
+using Retech.DataAccess.DataContext;
 
 var builder = WebApplication.CreateBuilder(args);
 

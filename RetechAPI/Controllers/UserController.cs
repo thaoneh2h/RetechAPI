@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RetechAPI.DTOS;
-using RetechAPI.Models;
-using RetechAPI.Services;
+using Retech.Application.Services;
+using Retech.Core.DTOS;
+using Retech.Core.Models;
 
 
-namespace RetechAPI.Controllers
+namespace Retech.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

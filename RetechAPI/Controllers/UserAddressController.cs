@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RetechAPI.Models;
-using RetechAPI.Services;
+using Retech.Application.Services;
+using Retech.Core.Models;
 
-namespace RetechAPI.Controllers
+namespace Retech.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -60,9 +60,9 @@ namespace RetechAPI.Controllers
             return Ok("Address deleted successfully");
         }
     }
-//Thêm địa chỉ: API POST để thêm địa chỉ mới cho người dùng.
-//Cập nhật địa chỉ: API PUT để cập nhật thông tin địa chỉ người dùng.
-//Xóa địa chỉ: API DELETE để xóa địa chỉ người dùng.
-//Lấy danh sách địa chỉ: API GET để lấy tất cả các địa chỉ của người dùng.
-//Lấy địa chỉ theo ID: API GET để lấy địa chỉ cụ thể theo ID
+    //Thêm địa chỉ: API POST để thêm địa chỉ mới cho người dùng.
+    //Cập nhật địa chỉ: API PUT để cập nhật thông tin địa chỉ người dùng.
+    //Xóa địa chỉ: API DELETE để xóa địa chỉ người dùng.
+    //Lấy danh sách địa chỉ: API GET để lấy tất cả các địa chỉ của người dùng.
+    //Lấy địa chỉ theo ID: API GET để lấy địa chỉ cụ thể theo ID
 }
