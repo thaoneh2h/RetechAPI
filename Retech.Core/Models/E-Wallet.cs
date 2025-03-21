@@ -7,7 +7,6 @@ namespace Retech.Core.Models
         [Key]
         public Guid WalletId { get; set; }
         public Guid UserId { get; set; }
-        public string Type { get; set; } // Loại ví (ví dụ: "Personal", "Business")
         public decimal Balance { get; set; }
         public string Currency { get; set; } = "VND";
         public string Status { get; set; } // enum: Active, Suspended, Closed
@@ -18,6 +17,7 @@ namespace Retech.Core.Models
         public ICollection<Payment> Payment { get; set; } = new List<Payment>();
         public ICollection<Order> Order { get; set; } = new List<Order>();
         public ICollection<TransactionHistory> TransactionHistory { get; set; } = new List<TransactionHistory>();
+        public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
 
     }
 }

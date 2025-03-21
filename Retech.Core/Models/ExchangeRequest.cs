@@ -15,6 +15,7 @@ namespace Retech.Core.Models
         public User UserOffer { get; set; }  // Người gửi yêu cầu trao đổi
         public Product RequestedProduct { get; set; }  // Sản phẩm mà người dùng muốn nhận
         public Product OfferedProduct { get; set; }  // Sản phẩm mà người dùng muốn trao đổi
+        public ICollection<Payment> Payment { get; set; } = new List<Payment>();
 
     }
 }

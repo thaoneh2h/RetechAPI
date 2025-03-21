@@ -15,15 +15,18 @@ namespace Retech.Core.Models
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public Guid CategoryId { get; set; } // FK
+        public Guid ProductVerificationId { get; set; }
         public string Images { get; set; } // JSON lưu danh sách ảnh
         public int Stock { get; set; }
         // Relationships
         public User User { get; set; }
         public Category Category { get; set; }
-        public DeviceVerification DeviceVerification { get; set; }
+        public DeviceVerificationForm DeviceVerificationForm { get; set; }
         public ICollection<ExchangeRequest> RequestedExchange { get; set; } = new List<ExchangeRequest>();  // Sản phẩm được yêu cầu
         public ICollection<ExchangeRequest> OfferedExchange { get; set; } = new List<ExchangeRequest>();  // Sản phẩm đưa ra trao đổi
         public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
         public ICollection<ShoppingCart> ShoppingCart { get; } = new List<ShoppingCart>();
+        public ProductVerification ProductVerification { get; set; }
+        public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
     }
 }

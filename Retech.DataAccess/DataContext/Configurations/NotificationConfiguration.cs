@@ -25,9 +25,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasConversion<string>();  // Store enum as string in the database
 
-            builder.Property(n => n.Type)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store enum as string in the database
+      
 
             builder.Property(n => n.SendDate)
                    .HasDefaultValueSql("GETUTCDATE()");  // Default to UTC now when the notification is created

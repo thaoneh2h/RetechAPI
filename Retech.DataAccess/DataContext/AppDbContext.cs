@@ -26,9 +26,13 @@ namespace Retech.DataAccess.DataContext
         public DbSet<Message> Message { get; set; }
         public DbSet<ExchangeRequest> ExchangeRequest { get; set; }
         public DbSet<E_Wallet> EWallet { get; set; }
-        public DbSet<DeviceVerification> DeviceVerification { get; set; }
+        public DbSet<DeviceVerificationForm> DeviceVerificationForm { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<ProductVerification> ProductVerifications { get; set; }
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -48,8 +52,13 @@ namespace Retech.DataAccess.DataContext
             modelBuilder.ApplyConfiguration(new MessageConfiguration());
             modelBuilder.ApplyConfiguration(new ExchangeRequestConfiguration());
             modelBuilder.ApplyConfiguration(new E_WalletConfiguration());
-            modelBuilder.ApplyConfiguration(new DeviceVerificationConfiguration());
+            modelBuilder.ApplyConfiguration(new DeviceVerificationFormConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductVerificationConfiguration());
+            modelBuilder.ApplyConfiguration(new UserSubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
         }
 
 

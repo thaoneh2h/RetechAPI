@@ -41,10 +41,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .WithMany(u => u.Order)  // Assuming User has many Orders
                    .HasForeignKey(o => o.UserId)
                    .OnDelete(DeleteBehavior.Cascade);  // Delete orders if the user is deleted
-            builder.HasOne(o => o.Payment)
-                   .WithOne(p => p.Order)  // One Payment corresponds to one Order
-                   .HasForeignKey<Payment>(p => p.OrderId)  // Payment contains the foreign key OrderId
-                   .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of Payment if it’s linked to an Order
 
             builder.HasOne(o => o.Voucher)
                     .WithOne(v => v.Order)  // Voucher corresponds to one Order (if Voucher has navigation to Order)

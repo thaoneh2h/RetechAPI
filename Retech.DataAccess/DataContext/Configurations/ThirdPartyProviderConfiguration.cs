@@ -21,14 +21,11 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasMaxLength(200);
 
-            builder.Property(tp => tp.ServiceType)
-                   .IsRequired()
-                   .HasMaxLength(100);  // Assuming ServiceType is stored as string
 
             builder.Property(tp => tp.ContactInfo)
                    .HasMaxLength(200);
 
-            builder.Property(tp => tp.Status)
+            builder.Property(tp => tp.ProviderStatus)
                    .IsRequired()
                    .HasMaxLength(50);  // Assuming Status is stored as string
 
@@ -41,10 +38,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasForeignKey(s => s.ThirdPartyProviderId)
                    .OnDelete(DeleteBehavior.Restrict);  // Restrict deletion if shipping records exist
 
-            builder.HasMany(tp => tp.deviceVerification)
-                   .WithOne(dv => dv.ThirdPartyProvider)
-                   .HasForeignKey(dv => dv.ThirdPartyProviderId)
-                   .OnDelete(DeleteBehavior.Restrict);  // Restrict deletion if device verification records exist
 
             // Table name
             builder.ToTable("ThirdPartyProvider");

@@ -1,0 +1,83 @@
+﻿using AutoMapper;
+using Retech.Application.Services;
+using Retech.Core.DTOS;
+using Retech.Core.Models;
+using Retech.DataAccess.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Retech.Core.Services
+{
+    public class TransactionService : ITransactionService
+    {
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IMapper _mapper;
+
+        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper)
+        {
+            _transactionRepository = transactionRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<Transaction> GetTransactionByIdAsync(Guid transactionId)
+        {
+            return await _transactionRepository.GetByIdAsync(transactionId);
+        }
+
+        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+        {
+            return await _transactionRepository.GetAllAsync();
+        }
+
+        public async Task CreateTransactionAsync(TransactionDTO transactionDto)
+        {
+            var transaction = _mapper.Map<Transaction>(transactionDto); // Ánh xạ từ TransactionDTO sang Transaction
+            await _transactionRepository.AddAsync(transaction);
+        }
+
+        public async Task UpdateTransactionAsync(Guid transactionId, TransactionDTO transactionDto)
+        {
+            var transaction = _mapper.Map<Transaction>(transactionDto); // Ánh xạ từ TransactionDTO sang Transaction
+            transaction.TransactionId = transactionId;  // Đảm bảo cập nhật đúng Transaction
+            await _transactionRepository.UpdateAsync(transaction);
+        }
+
+
+        public async Task DeleteTransactionAsync(Guid transactionId)
+        {
+            await _transactionRepository.DeleteAsync(transactionId);
+        }
+        public async Task ConfirmTransactionAsync(Guid transactionId)
+        {
+            var transaction = await _transactionRepository.GetByIdAsync(transactionId);
+            if (transaction != null && transaction.TransactionStatus == "Pending")
+            {
+                transaction.TransactionStatus = "Processing";  // Cập nhật trạng thái giao dịch
+                await _transactionRepository.UpdateAsync(transaction);
+            }
+        }
+
+        public async Task CompleteTransactionAsync(Guid transactionId)
+        {
+            var transaction = await _transactionRepository.GetByIdAsync(transactionId);
+            if (transaction != null && transaction.TransactionStatus == "Processing")
+            {
+                transaction.TransactionStatus = "Completed";  // Cập nhật trạng thái giao dịch
+                await _transactionRepository.UpdateAsync(transaction);
+            }
+        }
+
+        public async Task CancelTransactionAsync(Guid transactionId)
+        {
+            var transaction = await _transactionRepository.GetByIdAsync(transactionId);
+            if (transaction != null && transaction.TransactionStatus == "Pending")
+            {
+                transaction.TransactionStatus = "Canceled";  // Cập nhật trạng thái giao dịch
+                await _transactionRepository.UpdateAsync(transaction);
+            }
+        }
+    }
+}

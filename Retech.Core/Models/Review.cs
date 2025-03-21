@@ -6,13 +6,16 @@ namespace Retech.Core.Models
     {
         [Key]
         public Guid ReviewId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid ReviewerId { get; set; }
+        public Guid RevieweeId { get; set; }
         public Guid TransactionId { get; set; }
         public string Comment { get; set; }
         public string Rating { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
-        public User User { get; set; }
+        public User Reviewer { get; set; }
+        public User Reviewee { get; set; }
+        
         public TransactionHistory TransactionHistory { get; set; }
     }
 }

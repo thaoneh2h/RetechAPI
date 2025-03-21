@@ -10,6 +10,7 @@ namespace Retech.Core.Models
         public Guid WalletId { get; set; }
         public Guid? VoucherId { get; set; }
         public Guid? ReviewId { get; set; }
+        public string TransactionType { get; set; } //enum('Buy','Sell', 'Exchange')
         public string Detail { get; set; }
         public string Type { get; set; }
         public float Amount { get; set; }

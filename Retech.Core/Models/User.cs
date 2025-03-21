@@ -32,7 +32,13 @@ namespace Retech.Core.Models
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
         public ICollection<Notification> Notification { get; set; } = new List<Notification>();
-        public ICollection<DeviceVerification> DeviceVerification { get; set; } = new List<DeviceVerification>();
+        public ICollection<DeviceVerificationForm> DeviceVerificationForm { get; set; } = new List<DeviceVerificationForm>();
         public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
+        public ICollection<Review> Reviewer { get; set; } = new List<Review>();
+        public ICollection<Review> Reviewee { get; set; } = new List<Review>();
+        public ICollection<ProductVerification> ProductVerification { get; set; } = new List<ProductVerification>();
+        public UserSubscription UserSubscription { get; set; }
+        public ICollection<Transaction> Buyer { get; set; } = new List<Transaction>();
+        public ICollection<Transaction> Seller { get; set; } = new List<Transaction>();
     }
 }

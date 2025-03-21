@@ -21,9 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
-            builder.Property(v => v.MaxDiscountValue)
-                .HasColumnType("decimal(18,2)");
-
             builder.Property(v => v.ValidFrom)
                 .IsRequired();
 

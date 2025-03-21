@@ -66,10 +66,16 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(u => u.Review)
-                .WithOne(r => r.User)
-                .HasForeignKey(r => r.UserId)
+            builder.HasMany(u => u.Reviewer)
+                .WithOne(r => r.Reviewee)
+                .HasForeignKey(r => r.ReviewerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(u => u.Reviewee)
+                .WithOne(r => r.Reviewer)
+                .HasForeignKey(r => r.RevieweeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             builder.HasMany(u => u.SentMessages)
                 .WithOne(m => m.Sender)
@@ -109,7 +115,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .WithOne(n => n.User)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(u => u.DeviceVerification)
+            builder.HasMany(u => u.DeviceVerificationForm)
                 .WithOne(n => n.User)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

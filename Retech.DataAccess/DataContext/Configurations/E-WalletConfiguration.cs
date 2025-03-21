@@ -29,9 +29,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasConversion<string>();  // Store enum as string in the database
 
-            builder.Property(w => w.Type)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store enum as string in the database
 
             builder.Property(w => w.KycVerified)
                    .IsRequired();  // KYC verification status is required

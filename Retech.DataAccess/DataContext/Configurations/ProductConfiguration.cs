@@ -58,10 +58,14 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasForeignKey(p => p.CategoryId)
                    .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of category if products exist
 
-            builder.HasOne(p => p.DeviceVerification)
+            builder.HasOne(p => p.DeviceVerificationForm)
                    .WithOne(dv => dv.Product)
-                   .HasForeignKey<DeviceVerification>(dv => dv.ProductId)
+                   .HasForeignKey<DeviceVerificationForm>(dv => dv.ProductId)
                    .OnDelete(DeleteBehavior.SetNull);  // Set DeviceVerification to null if product is deleted
+            builder.HasOne(p => p.ProductVerification)
+                   .WithOne(dv => dv.Product)
+                   .HasForeignKey<ProductVerification>(dv => dv.ProductVerificationId)
+                   .OnDelete(DeleteBehavior.SetNull);
 
             // Indexes
             builder.HasIndex(p => p.ProductName);  // Optional: Index for searching products by name

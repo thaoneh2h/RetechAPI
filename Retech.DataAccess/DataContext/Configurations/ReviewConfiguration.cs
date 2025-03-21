@@ -29,10 +29,14 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasDefaultValueSql("GETUTCDATE()");  // Defaults to UTC now when the review is created
 
             // Relationships
-            builder.HasOne(r => r.User)
+            builder.HasOne(r => r.Reviewer)
                    .WithMany(u => u.Review)  // Assuming User has a collection of Reviews
-                   .HasForeignKey(r => r.UserId)
+                   .HasForeignKey(r => r.ReviewerId)
                    .OnDelete(DeleteBehavior.Cascade);  // Delete reviews if the user is deleted
+            builder.HasOne(r => r.Reviewee)
+                    .WithMany(u => u.Review)  // Assuming User has a collection of Reviews
+                    .HasForeignKey(r => r.RevieweeId)
+                    .OnDelete(DeleteBehavior.Cascade);  // Delete reviews if the user is deleted
 
             builder.HasOne(r => r.TransactionHistory)
                    .WithOne(th => th.Review)  // One-to-one relationship

@@ -18,7 +18,7 @@ namespace Retech.Application.Services
         {
             var review = new Review
             {
-                UserId = createReviewDTO.UserId,
+                ReviewerId = createReviewDTO.UserId,
                 TransactionId = createReviewDTO.TransactionId,
                 Comment = createReviewDTO.Comment,
                 Rating = createReviewDTO.Rating,
@@ -30,7 +30,7 @@ namespace Retech.Application.Services
             return new ReviewDTO
             {
                 ReviewId = review.ReviewId,
-                UserName = review.User.UserName,  // Assuming User is loaded
+                UserName = review.Reviewer.UserName,  // Assuming User is loaded
                 Comment = review.Comment,
                 Rating = review.Rating,
                 CreatedAt = review.CreatedAt
@@ -45,7 +45,7 @@ namespace Retech.Application.Services
             return new ReviewDTO
             {
                 ReviewId = review.ReviewId,
-                UserName = review.User.UserName,  // Assuming User is loaded
+                UserName = review.Reviewer.UserName,  // Assuming User is loaded
                 Comment = review.Comment,
                 Rating = review.Rating,
                 CreatedAt = review.CreatedAt
