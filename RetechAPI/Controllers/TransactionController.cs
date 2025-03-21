@@ -97,5 +97,15 @@ namespace Retech.API.Controllers
             await _transactionService.CancelTransactionAsync(transactionId);
             return NoContent();
         }
+        // Lấy lịch sử giao dịch của người dùng
+        [HttpGet("history/{userId}")]
+        public async Task<ActionResult<IEnumerable<TransactionDTO>>> GetTransactionHistory(Guid userId)
+        {
+            var transactions = await _transactionService.GetTransactionsByUserIdAsync(userId);
+            if (transactions == null || !transactions.Any())
+                return NotFound("No transactions found for this user.");
+
+            return Ok(transactions);  // Trả về danh sách giao dịch của người dùng dưới dạng DTO
+        }
     }
 }

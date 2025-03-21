@@ -59,5 +59,14 @@ namespace Retech.DataAccess.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Transaction>> GetTransactionsByUserIdAsync(Guid userId)
+        {
+            return await _context.Transaction
+                .Where(t => t.BuyerId == userId || t.SellerId == userId)  // Lọc theo BuyerId hoặc SellerId
+                .Include(t => t.Product)
+                .Include(t => t.Buyer)
+                .Include(t => t.Seller)
+                .ToListAsync();
+        }
     }
 }

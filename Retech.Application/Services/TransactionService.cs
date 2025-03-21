@@ -79,5 +79,11 @@ namespace Retech.Core.Services
                 await _transactionRepository.UpdateAsync(transaction);
             }
         }
+        // Lấy giao dịch của người dùng
+        public async Task<IEnumerable<TransactionDTO>> GetTransactionsByUserIdAsync(Guid userId)
+        {
+            var transactions = await _transactionRepository.GetTransactionsByUserIdAsync(userId);
+            return _mapper.Map<IEnumerable<TransactionDTO>>(transactions);  // Ánh xạ từ Entity sang DTO
+        }
     }
 }

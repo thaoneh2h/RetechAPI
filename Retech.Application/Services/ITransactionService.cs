@@ -19,5 +19,6 @@ namespace Retech.Application.Services
         Task ConfirmTransactionAsync(Guid transactionId);  // Xác nhận giao dịch
         Task CompleteTransactionAsync(Guid transactionId);  // Hoàn tất giao dịch
         Task CancelTransactionAsync(Guid transactionId);    // Hủy giao dịch
+        Task<IEnumerable<TransactionDTO>> GetTransactionsByUserIdAsync(Guid userId);  // Lấy giao dịch của người dùng
     }
 }

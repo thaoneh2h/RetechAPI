@@ -14,5 +14,6 @@ namespace Retech.DataAccess.Repositories
         Task AddAsync(Transaction transaction);
         Task UpdateAsync(Transaction transaction);
         Task DeleteAsync(Guid transactionId);
+        Task<IEnumerable<Transaction>> GetTransactionsByUserIdAsync(Guid userId);  // Lọc giao dịch của người dùng
     }
 }
