@@ -16,7 +16,7 @@ namespace Retech.Core.Models
         public User User { get; set; }
         public ICollection<Payment> Payment { get; set; } = new List<Payment>();
         public ICollection<Order> Order { get; set; } = new List<Order>();
-        public ICollection<TransactionHistory> TransactionHistory { get; set; } = new List<TransactionHistory>();
+        public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();
         public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
 
     }

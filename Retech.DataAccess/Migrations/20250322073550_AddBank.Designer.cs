@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250322073550_AddBank")]
+    partial class AddBank
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +128,6 @@ namespace Retech.DataAccess.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<decimal>("DealPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("ExchangeStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -141,9 +141,6 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("UserOfferId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserResponseId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ExchangeRequestId");
 
                     b.HasIndex("OfferedProductId");
@@ -151,8 +148,6 @@ namespace Retech.DataAccess.Migrations
                     b.HasIndex("RequestedProductId");
 
                     b.HasIndex("UserOfferId");
-
-                    b.HasIndex("UserResponseId");
 
                     b.ToTable("ExchangeRequest", (string)null);
                 });
@@ -267,65 +262,6 @@ namespace Retech.DataAccess.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Order", (string)null);
-                });
-
-            modelBuilder.Entity("Retech.Core.Models.OrderHistory", b =>
-                {
-                    b.Property<Guid>("HistoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("AmountDecimal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Detail")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("WalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("HistoryId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VoucherId");
-
-                    b.HasIndex("WalletId");
-
-                    b.ToTable("OrderHistory", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.OrderItem", b =>
@@ -447,10 +383,7 @@ namespace Retech.DataAccess.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ModelYear")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("OriginalPrice")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductName")
@@ -460,13 +393,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.Property<Guid>("ProductVerificationId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RepairHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("SellingPrice")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -538,9 +464,6 @@ namespace Retech.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("HistoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Rating")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -551,17 +474,20 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("ReviewerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("HistoryId")
-                        .IsUnique();
-
                     b.HasIndex("RevieweeId");
 
                     b.HasIndex("ReviewerId");
+
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -749,6 +675,65 @@ namespace Retech.DataAccess.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Transaction", (string)null);
+                });
+
+            modelBuilder.Entity("Retech.Core.Models.TransactionHistory", b =>
+                {
+                    b.Property<Guid>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("AmountDecimal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("VoucherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("TransactionHistory", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.User", b =>
@@ -977,15 +962,9 @@ namespace Retech.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Retech.Core.Models.User", "UserOffer")
-                        .WithMany("UserOfferId")
+                        .WithMany("ExchangeRequest")
                         .HasForeignKey("UserOfferId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Retech.Core.Models.User", "UserResponse")
-                        .WithMany("UserResponseId")
-                        .HasForeignKey("UserResponseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("OfferedProduct");
@@ -993,8 +972,6 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("RequestedProduct");
 
                     b.Navigation("UserOffer");
-
-                    b.Navigation("UserResponse");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Message", b =>
@@ -1049,36 +1026,6 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("EWallet");
 
                     b.Navigation("User");
-
-                    b.Navigation("Voucher");
-                });
-
-            modelBuilder.Entity("Retech.Core.Models.OrderHistory", b =>
-                {
-                    b.HasOne("Retech.Core.Models.Order", "Order")
-                        .WithMany("OrderHistory")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Retech.Core.Models.User", null)
-                        .WithMany("TransactionHistory")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("Retech.Core.Models.Voucher", "Voucher")
-                        .WithMany("OrderHistory")
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Retech.Core.Models.E_Wallet", "EWallet")
-                        .WithMany("OrderHistory")
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("EWallet");
-
-                    b.Navigation("Order");
 
                     b.Navigation("Voucher");
                 });
@@ -1173,12 +1120,6 @@ namespace Retech.DataAccess.Migrations
 
             modelBuilder.Entity("Retech.Core.Models.Review", b =>
                 {
-                    b.HasOne("Retech.Core.Models.OrderHistory", "OrderHistory")
-                        .WithOne("Review")
-                        .HasForeignKey("Retech.Core.Models.Review", "HistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Retech.Core.Models.User", "Reviewer")
                         .WithMany("Reviewee")
                         .HasForeignKey("RevieweeId")
@@ -1191,15 +1132,21 @@ namespace Retech.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Retech.Core.Models.TransactionHistory", "TransactionHistory")
+                        .WithOne("Review")
+                        .HasForeignKey("Retech.Core.Models.Review", "TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Retech.Core.Models.User", null)
                         .WithMany("Review")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("OrderHistory");
-
                     b.Navigation("Reviewee");
 
                     b.Navigation("Reviewer");
+
+                    b.Navigation("TransactionHistory");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Shipping", b =>
@@ -1274,6 +1221,36 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("Seller");
                 });
 
+            modelBuilder.Entity("Retech.Core.Models.TransactionHistory", b =>
+                {
+                    b.HasOne("Retech.Core.Models.Order", "Order")
+                        .WithMany("TransactionHistory")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Retech.Core.Models.User", null)
+                        .WithMany("TransactionHistory")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("Retech.Core.Models.Voucher", "Voucher")
+                        .WithMany("TransactionHistory")
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Retech.Core.Models.E_Wallet", "EWallet")
+                        .WithMany("TransactionHistory")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EWallet");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Voucher");
+                });
+
             modelBuilder.Entity("Retech.Core.Models.UserAddress", b =>
                 {
                     b.HasOne("Retech.Core.Models.User", "User")
@@ -1324,11 +1301,11 @@ namespace Retech.DataAccess.Migrations
                 {
                     b.Navigation("Order");
 
-                    b.Navigation("OrderHistory");
-
                     b.Navigation("Payment");
 
                     b.Navigation("Transaction");
+
+                    b.Navigation("TransactionHistory");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.ExchangeRequest", b =>
@@ -1338,20 +1315,14 @@ namespace Retech.DataAccess.Migrations
 
             modelBuilder.Entity("Retech.Core.Models.Order", b =>
                 {
-                    b.Navigation("OrderHistory");
-
                     b.Navigation("OrderItem");
 
                     b.Navigation("Payment");
 
                     b.Navigation("Shipping")
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Retech.Core.Models.OrderHistory", b =>
-                {
-                    b.Navigation("Review")
-                        .IsRequired();
+                    b.Navigation("TransactionHistory");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Product", b =>
@@ -1383,6 +1354,12 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("shippings");
                 });
 
+            modelBuilder.Entity("Retech.Core.Models.TransactionHistory", b =>
+                {
+                    b.Navigation("Review")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Retech.Core.Models.User", b =>
                 {
                     b.Navigation("Buyer");
@@ -1391,6 +1368,8 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("EWallet")
                         .IsRequired();
+
+                    b.Navigation("ExchangeRequest");
 
                     b.Navigation("Notification");
 
@@ -1419,10 +1398,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("UserAddresses");
 
-                    b.Navigation("UserOfferId");
-
-                    b.Navigation("UserResponseId");
-
                     b.Navigation("UserSubscription")
                         .IsRequired();
 
@@ -1439,7 +1414,7 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("Order")
                         .IsRequired();
 
-                    b.Navigation("OrderHistory");
+                    b.Navigation("TransactionHistory");
                 });
 #pragma warning restore 612, 618
         }

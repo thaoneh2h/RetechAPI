@@ -2,10 +2,10 @@
 
 namespace Retech.Core.Models
 {
-    public class TransactionHistory
+    public class OrderHistory
     {
         [Key]
-        public Guid TransactionId { get; set; }
+        public Guid HistoryId { get; set; }
         public Guid OrderId { get; set; }
         public Guid WalletId { get; set; }
         public Guid? VoucherId { get; set; }

@@ -38,9 +38,9 @@ namespace Retech.DataAccess.DataContext.Configurations
                     .HasForeignKey(r => r.RevieweeId)
                     .OnDelete(DeleteBehavior.Cascade);  // Delete reviews if the user is deleted
 
-            builder.HasOne(r => r.TransactionHistory)
+            builder.HasOne(r => r.OrderHistory)
                    .WithOne(th => th.Review)  // One-to-one relationship
-                   .HasForeignKey<TransactionHistory>(th => th.ReviewId)  // Foreign Key in TransactionHistory pointing to Review
+                   .HasForeignKey<OrderHistory>(th => th.ReviewId)  // Foreign Key in TransactionHistory pointing to Review
                    .OnDelete(DeleteBehavior.SetNull);  // Set ReviewId to null if the transaction is deleted
 
             // Table name

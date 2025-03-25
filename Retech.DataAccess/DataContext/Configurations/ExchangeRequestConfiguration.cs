@@ -27,15 +27,17 @@ namespace Retech.DataAccess.DataContext.Configurations
 
             // Relationships
             builder.HasOne(er => er.UserOffer)
-                   .WithMany(u => u.ExchangeRequest)  // Assuming User has a collection of ExchangeRequests
+                   .WithMany(u => u.UserOfferId)  // Assuming User has a collection of ExchangeRequests
                    .HasForeignKey(er => er.UserOfferId)
-                   .OnDelete(DeleteBehavior.Cascade);  // Delete exchange request if the user is deleted
-
+                   .OnDelete(DeleteBehavior.Restrict);  // Delete exchange request if the user is deleted
+            builder.HasOne(er => er.UserResponse)
+                    .WithMany(u => u.UserResponseId)  // Assuming User has a collection of ExchangeRequests
+                    .HasForeignKey(er => er.UserResponseId)
+                    .OnDelete(DeleteBehavior.Restrict);  // Delete exchange request if the user is deleted
             builder.HasOne(er => er.RequestedProduct)
                    .WithMany(p => p.RequestedExchange)  // Assuming Product does not have a collection of ExchangeRequests
                    .HasForeignKey(er => er.RequestedProductId)
                    .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of requested product if it’s in an exchange request
-
             builder.HasOne(er => er.OfferedProduct)
                    .WithMany(p => p.OfferedExchange)  // Assuming Product does not have a collection of ExchangeRequests
                    .HasForeignKey(er => er.OfferedProductId)

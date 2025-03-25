@@ -15,6 +15,6 @@ namespace Retech.Core.Models
         // Relationships
         public User User { get; set; }
         public Order Order { get; set; }
-        public ICollection<TransactionHistory> TransactionHistory { get; set; }
+        public ICollection<OrderHistory> OrderHistory { get; set; }
     }
 }

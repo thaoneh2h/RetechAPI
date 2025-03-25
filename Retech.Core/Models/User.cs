@@ -22,13 +22,14 @@ namespace Retech.Core.Models
 
         // Relationships
         public ICollection<Voucher> Voucher { get; set; } = new List<Voucher>();
-        public ICollection<TransactionHistory> TransactionHistory { get; set; } = new List<TransactionHistory>();
+        public ICollection<OrderHistory> TransactionHistory { get; set; } = new List<OrderHistory>();
         public ICollection<Order> Order { get; set; } = new List<Order>();
         public E_Wallet EWallet { get; set; }
         public ShoppingCart ShoppingCart { get; set; }
         public ICollection<Product> Product { get; set; } = new List<Product>();
         public ICollection<Review> Review { get; set; } = new List<Review>();
-        public ICollection<ExchangeRequest> ExchangeRequest { get; set; } = new List<ExchangeRequest>();
+        public ICollection<ExchangeRequest> UserOfferId { get; set; } = new List<ExchangeRequest>();
+        public ICollection<ExchangeRequest> UserResponseId { get; set; } = new List<ExchangeRequest>();
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
         public ICollection<Notification> Notification { get; set; } = new List<Notification>();

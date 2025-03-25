@@ -19,7 +19,7 @@ namespace Retech.Application.Services
             var review = new Review
             {
                 ReviewerId = createReviewDTO.UserId,
-                TransactionId = createReviewDTO.TransactionId,
+                HistoryId = createReviewDTO.TransactionId,
                 Comment = createReviewDTO.Comment,
                 Rating = createReviewDTO.Rating,
                 CreatedAt = DateTime.UtcNow

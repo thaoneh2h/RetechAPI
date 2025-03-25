@@ -21,6 +21,6 @@ namespace Retech.Core.Models
         public E_Wallet EWallet { get; set; }
         public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
         public Shipping Shipping { get; set; }
-        public ICollection<TransactionHistory> TransactionHistory { get; set; } = new List<TransactionHistory>();
+        public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();
     }
 }

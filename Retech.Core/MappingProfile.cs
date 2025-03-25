@@ -29,6 +29,10 @@ namespace Retech.Core
 
             // Ánh xạ từ TransactionDTO -> Transaction
             CreateMap<TransactionDTO, Transaction>();
+
+            CreateMap<Product, ProductDTO>();
+            CreateMap<ProductDTO, Product>();
+
         }
     }
 }

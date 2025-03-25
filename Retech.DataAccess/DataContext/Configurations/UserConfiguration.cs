@@ -102,10 +102,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(u => u.ExchangeRequest)
-                .WithOne(e => e.UserOffer)
-                .HasForeignKey(e => e.UserOfferId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(u => u.Notification)
                 .WithOne(n => n.User)

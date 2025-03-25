@@ -7,14 +7,17 @@ namespace Retech.Core.Models
         [Key]
         public Guid ProductId { get; set; }
         public Guid UserId { get; set; } // Chủ sở hữu sản phẩm
+        public Guid CategoryId { get; set; } // FK
         public string ProductName { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public int ModelYear { get; set; }
+        public string RepairHistory { get; set; }
         public string Condition { get; set; } // Enum: New, Like New, Used
         public string Status { get; set; } // Enum: Available, Out of Stock
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
-        public Guid CategoryId { get; set; } // FK
         public Guid ProductVerificationId { get; set; }
         public string Images { get; set; } // JSON lưu danh sách ảnh
         public int Stock { get; set; }

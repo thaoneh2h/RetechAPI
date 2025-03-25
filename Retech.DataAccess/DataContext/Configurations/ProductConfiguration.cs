@@ -24,9 +24,12 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(p => p.Description)
                    .HasMaxLength(1000); // Maximum length for product description
 
-            builder.Property(p => p.Price)
+            builder.Property(p => p.SellingPrice)
                    .IsRequired()
-                   .HasColumnType("decimal(18, 2)"); // Price with precision
+                   .HasColumnType("decimal(18, 2)");
+            builder.Property(p => p.OriginalPrice)
+                    .IsRequired()
+                    .HasColumnType("decimal(18, 2)");
 
             builder.Property(p => p.Condition)
                    .IsRequired();

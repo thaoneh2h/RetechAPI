@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325082854_UpdateDatabase6")]
+    partial class UpdateDatabase6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +128,6 @@ namespace Retech.DataAccess.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<decimal>("DealPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("ExchangeStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -141,9 +141,6 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("UserOfferId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserResponseId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ExchangeRequestId");
 
                     b.HasIndex("OfferedProductId");
@@ -151,8 +148,6 @@ namespace Retech.DataAccess.Migrations
                     b.HasIndex("RequestedProductId");
 
                     b.HasIndex("UserOfferId");
-
-                    b.HasIndex("UserResponseId");
 
                     b.ToTable("ExchangeRequest", (string)null);
                 });
@@ -447,10 +442,7 @@ namespace Retech.DataAccess.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ModelYear")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("OriginalPrice")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductName")
@@ -460,13 +452,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.Property<Guid>("ProductVerificationId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RepairHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("SellingPrice")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -977,15 +962,9 @@ namespace Retech.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Retech.Core.Models.User", "UserOffer")
-                        .WithMany("UserOfferId")
+                        .WithMany("ExchangeRequest")
                         .HasForeignKey("UserOfferId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Retech.Core.Models.User", "UserResponse")
-                        .WithMany("UserResponseId")
-                        .HasForeignKey("UserResponseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("OfferedProduct");
@@ -993,8 +972,6 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("RequestedProduct");
 
                     b.Navigation("UserOffer");
-
-                    b.Navigation("UserResponse");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Message", b =>
@@ -1392,6 +1369,8 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("EWallet")
                         .IsRequired();
 
+                    b.Navigation("ExchangeRequest");
+
                     b.Navigation("Notification");
 
                     b.Navigation("Order");
@@ -1418,10 +1397,6 @@ namespace Retech.DataAccess.Migrations
                     b.Navigation("TransactionHistory");
 
                     b.Navigation("UserAddresses");
-
-                    b.Navigation("UserOfferId");
-
-                    b.Navigation("UserResponseId");
 
                     b.Navigation("UserSubscription")
                         .IsRequired();
