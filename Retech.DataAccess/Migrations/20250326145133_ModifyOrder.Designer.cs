@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326145133_ModifyOrder")]
+    partial class ModifyOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,6 +272,10 @@ namespace Retech.DataAccess.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<string>("OrderCondition")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -490,6 +497,9 @@ namespace Retech.DataAccess.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid>("ProductVerificationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RepairHistory")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -531,9 +541,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("SuggestPrice")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

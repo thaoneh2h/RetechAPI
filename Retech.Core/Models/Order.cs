@@ -6,16 +6,17 @@ namespace Retech.Core.Models
     {
         [Key]
         public Guid OrderId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid BuyerId { get; set; }  // Reference to the buyer
+        public Guid SellerId { get; set; } // Reference to the seller
         public Guid WalletId { get; set; }
         public Guid? VoucherId { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public string OrderStatus { get; set; } //enum : Placed, Approved, Delivered, Canceled
-        public string OrderCondition { get; set; } // enum : Processing, Shipping, Delivered
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
-        public User User { get; set; }
+        public User Buyer { get; set; }
+        public User Seller { get; set; }
         public ICollection<Payment> Payment { get; set; } = new List<Payment>();
         public Voucher Voucher { get; set; }
         public E_Wallet EWallet { get; set; }

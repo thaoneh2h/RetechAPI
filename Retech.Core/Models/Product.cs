@@ -18,7 +18,6 @@ namespace Retech.Core.Models
         public string Status { get; set; } // Enum: Available, Out of Stock
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
-        public Guid ProductVerificationId { get; set; }
         public string Images { get; set; } // JSON lưu danh sách ảnh
         public int Stock { get; set; }
         // Relationships

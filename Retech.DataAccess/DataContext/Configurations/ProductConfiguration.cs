@@ -65,10 +65,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .WithOne(dv => dv.Product)
                    .HasForeignKey<DeviceVerificationForm>(dv => dv.ProductId)
                    .OnDelete(DeleteBehavior.SetNull);  // Set DeviceVerification to null if product is deleted
-            builder.HasOne(p => p.ProductVerification)
-                   .WithOne(dv => dv.Product)
-                   .HasForeignKey<ProductVerification>(dv => dv.ProductVerificationId)
-                   .OnDelete(DeleteBehavior.SetNull);
 
             // Indexes
             builder.HasIndex(p => p.ProductName);  // Optional: Index for searching products by name

@@ -20,6 +20,14 @@ namespace Retech.Application.Services
             _productRepository = productRepository;
             _mapper = mapper;
         }
+        public async Task<IEnumerable<ProductDTO>> SearchProductsAsync(string keyword, decimal? minPrice, decimal? maxPrice, string condition, string brand)
+        {
+            // Call the repository method to fetch the data
+            var products = await _productRepository.SearchProductsAsync(keyword, minPrice, maxPrice, condition, brand);
+
+            // Map to DTOs before returning the result
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
 
         public async Task<ProductDTO> CreateProductAsync(ProductDTO productDto)
         {
@@ -58,5 +66,21 @@ namespace Retech.Application.Services
             var products = await _productRepository.GetByCategoryAsync(category);
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
+        public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
+        {
+            // Fetch all products from the repository
+            var products = await _productRepository.GetAllAsync();
+
+            // Map products to ProductDTO
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+
+
+
+
+
+
+
+
     }
 }

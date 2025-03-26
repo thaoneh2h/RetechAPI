@@ -20,8 +20,44 @@ namespace Retech.Application.Services
                 _orderRepository = orderRepository;
                 _mapper = mapper;
             }
+        public async Task ProposeOrderAsync(OrderDTO orderDto)
+        {
+            var order = _mapper.Map<Order>(orderDto);
+            order.OrderStatus = "Pending";  // Initially, when buyer proposes an order
+            await _orderRepository.AddAsync(order);
+        }
 
-            public async Task<OrderDTO> GetOrderByIdAsync(Guid orderId)
+        public async Task ApproveOrderAsync(Guid orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found");
+
+            order.OrderStatus = "Approved";  // Seller approves the order
+            await _orderRepository.UpdateAsync(order);
+        }
+
+        public async Task CancelOrderAsync(Guid orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found");
+
+            order.OrderStatus = "Cancelled";  // Cancel the order
+            await _orderRepository.UpdateAsync(order);
+        }
+
+        public async Task CompleteOrderAsync(Guid orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found");
+
+            order.OrderStatus = "Completed";  // Complete the order
+            await _orderRepository.UpdateAsync(order);
+        }
+
+        public async Task<OrderDTO> GetOrderByIdAsync(Guid orderId)
             {
                 var order = await _orderRepository.GetByIdAsync(orderId);
                 return _mapper.Map<OrderDTO>(order);

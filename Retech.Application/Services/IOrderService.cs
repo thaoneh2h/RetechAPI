@@ -14,6 +14,10 @@ namespace Retech.Application.Services
         Task CreateOrderAsync(OrderDTO orderDto);
         Task UpdateOrderAsync(Guid orderId, OrderDTO orderDto);
         Task DeleteOrderAsync(Guid orderId);
+        Task ProposeOrderAsync(OrderDTO orderDto);
+        Task ApproveOrderAsync(Guid orderId);
+        Task CancelOrderAsync(Guid orderId);
+        Task CompleteOrderAsync(Guid orderId);
     }
 
 }

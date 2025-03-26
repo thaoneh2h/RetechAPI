@@ -32,15 +32,16 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasConversion<string>();  // Store as string in the database
 
-            builder.Property(o => o.OrderCondition)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store as string in the database
-
             // Relationships
-            builder.HasOne(o => o.User)
-                   .WithMany(u => u.Order)  // Assuming User has many Orders
-                   .HasForeignKey(o => o.UserId)
-                   .OnDelete(DeleteBehavior.Cascade);  // Delete orders if the user is deleted
+            builder.HasOne(o => o.Buyer)
+               .WithMany(u => u.BuyerId)  
+               .HasForeignKey(o => o.BuyerId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(o => o.Seller)
+                .WithMany(u => u.SellerId)  
+                .HasForeignKey(o => o.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(o => o.Voucher)
                     .WithOne(v => v.Order)  // Voucher corresponds to one Order (if Voucher has navigation to Order)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326155830_FixProduct")]
+    partial class FixProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -531,9 +534,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("SuggestPrice")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

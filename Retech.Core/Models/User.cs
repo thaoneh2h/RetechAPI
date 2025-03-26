@@ -23,7 +23,8 @@ namespace Retech.Core.Models
         // Relationships
         public ICollection<Voucher> Voucher { get; set; } = new List<Voucher>();
         public ICollection<OrderHistory> TransactionHistory { get; set; } = new List<OrderHistory>();
-        public ICollection<Order> Order { get; set; } = new List<Order>();
+        public ICollection<Order> BuyerId { get; set; } = new List<Order>();
+        public ICollection<Order> SellerId { get; set; } = new List<Order>();
         public E_Wallet EWallet { get; set; }
         public ShoppingCart ShoppingCart { get; set; }
         public ICollection<Product> Product { get; set; } = new List<Product>();

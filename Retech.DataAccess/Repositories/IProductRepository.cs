@@ -14,5 +14,7 @@ namespace Retech.DataAccess.Repositories
         Task<IEnumerable<Product>> GetByCategoryAsync(string category);
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
+        Task<IEnumerable<Product>> SearchProductsAsync(string keyword, decimal? minPrice, decimal? maxPrice, string condition, string brand);
+        Task<IEnumerable<Product>> GetAllAsync();
     }
 }

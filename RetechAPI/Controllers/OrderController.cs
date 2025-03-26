@@ -15,6 +15,34 @@ namespace Retech.API.Controllers
         {
             _orderService = orderService;
         }
+        [HttpPost("propose")]
+        public async Task<ActionResult> ProposeOrder([FromBody] OrderDTO orderDto)
+        {
+            await _orderService.ProposeOrderAsync(orderDto);  // Logic for when a buyer proposes an order
+            return CreatedAtAction(nameof(GetOrderById), new { orderId = orderDto.OrderId }, orderDto);
+        }
+
+        [HttpPut("approve/{orderId}")]
+        public async Task<ActionResult> ApproveOrder(Guid orderId)
+        {
+            await _orderService.ApproveOrderAsync(orderId);  // Logic for when a seller confirms the order
+            return NoContent();
+        }
+
+        [HttpPut("cancel/{orderId}")]
+        public async Task<ActionResult> CancelOrder(Guid orderId)
+        {
+            await _orderService.CancelOrderAsync(orderId);  // Logic for canceling the order
+            return NoContent();
+        }
+
+        [HttpPut("complete/{orderId}")]
+        public async Task<ActionResult> CompleteOrder(Guid orderId)
+        {
+            await _orderService.CompleteOrderAsync(orderId);  // Logic for completing the transaction (could also mark as shipped, etc.)
+            return NoContent();
+        }
+
 
         [HttpGet("{orderId}")]
         public async Task<ActionResult<OrderDTO>> GetOrderById(Guid orderId)

@@ -20,7 +20,9 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(p => p.VerificationResult)
                    .HasColumnType("float")
                    .HasDefaultValue(0);
-
+            builder.Property(p => p.SuggestPrice)
+                    .IsRequired()
+                    .HasColumnType("decimal(18, 2)");
             builder.Property(pv => pv.CreateAt)
                 .HasDefaultValueSql("GETUTCDATE()");  // Auto set the created date to UTC now
 

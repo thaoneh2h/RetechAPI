@@ -22,5 +22,6 @@ namespace Retech.Core.DTOS
         public string Images { get; set; }
         public int Stock { get; set; }
         public Guid CategoryId { get; set; }
+        public string BrandName { get; set; }
     }
 }

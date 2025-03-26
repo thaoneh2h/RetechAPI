@@ -63,10 +63,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasMaxLength(50);
 
             // Relationships (One-to-Many relationships)
-            builder.HasMany(u => u.Order)
-                .WithOne(o => o.User)
-                .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+
 
             builder.HasMany(u => u.ReviewerReview)
                 .WithOne(r => r.Reviewer)

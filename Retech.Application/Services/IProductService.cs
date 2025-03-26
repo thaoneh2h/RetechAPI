@@ -14,6 +14,8 @@ namespace Retech.Application.Services
         Task<bool> DeleteProductAsync(Guid productId);
         Task<ProductDTO> GetProductByIdAsync(Guid productId);
         Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(string category);
+        Task<IEnumerable<ProductDTO>> SearchProductsAsync(string keyword, decimal? minPrice, decimal? maxPrice, string condition, string brand);
+        Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
     }
 
 }

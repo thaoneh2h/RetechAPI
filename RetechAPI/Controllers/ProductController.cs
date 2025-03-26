@@ -16,6 +16,19 @@ namespace Retech.API.Controllers
             _productService = productService;
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> SearchProducts([FromQuery] string keyword,
+                                                                            [FromQuery] decimal? minPrice,
+                                                                            [FromQuery] decimal? maxPrice,
+                                                                            [FromQuery] string condition,
+                                                                            [FromQuery] string brand)
+        {
+            var products = await _productService.SearchProductsAsync(keyword, minPrice, maxPrice, condition, brand);
+            return Ok(products);
+        }
+
+
+
         [HttpPost]
         public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductDTO productDto)
         {
@@ -60,6 +73,12 @@ namespace Retech.API.Controllers
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] string category = null)
         {
             var products = await _productService.GetProductsByCategoryAsync(category);
+            return Ok(products);
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+        {
+            var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
     }
