@@ -21,9 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasMaxLength(500);
 
-            builder.Property(th => th.Type)
-                   .IsRequired()
-                   .HasMaxLength(50);
 
             builder.Property(th => th.Amount)
                    .IsRequired()
@@ -47,11 +44,11 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired(false)  // Voucher is optional
                    .OnDelete(DeleteBehavior.SetNull);  // Set to null if Voucher is deleted
 
-            // One-to-one relationship with Review
-            builder.HasOne(th => th.Review)  // TransactionHistory -> Review
-                   .WithOne(r => r.OrderHistory)  // Review -> TransactionHistory
-                   .HasForeignKey<Review>(r => r.HistoryId)  // Review has the foreign key TransactionId
-                   .OnDelete(DeleteBehavior.Cascade);  // If transaction history is deleted, the review is also deleted
+            // one to many relationship with Review
+            builder.HasMany(th => th.Review)  // Một OrderHistory có nhiều Review
+                   .WithOne(r => r.OrderHistory)  // Một Review thuộc về một OrderHistory
+                   .HasForeignKey(r => r.HistoryId)  // Review sẽ chứa khóa ngoại HistoryId
+                   .OnDelete(DeleteBehavior.Cascade);  // Nếu xóa OrderHistory, xóa luôn các review liên quan
 
             // Auto-set the CreatedAt to UTC now
             builder.Property(th => th.CreatedAt)

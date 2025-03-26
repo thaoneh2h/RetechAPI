@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326041808_UpdateDatabase10")]
+    partial class UpdateDatabase10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,9 +297,17 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("TransactionType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -529,8 +540,9 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("HistoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RevieweeId")
                         .HasColumnType("uniqueidentifier");
@@ -538,13 +550,19 @@ namespace Retech.DataAccess.Migrations
                     b.Property<Guid>("ReviewerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("HistoryId");
+                    b.HasIndex("HistoryId")
+                        .IsUnique();
 
                     b.HasIndex("RevieweeId");
 
                     b.HasIndex("ReviewerId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Review");
                 });
@@ -776,10 +794,8 @@ namespace Retech.DataAccess.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<double>("Rating")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -1157,22 +1173,26 @@ namespace Retech.DataAccess.Migrations
             modelBuilder.Entity("Retech.Core.Models.Review", b =>
                 {
                     b.HasOne("Retech.Core.Models.OrderHistory", "OrderHistory")
-                        .WithMany("Review")
-                        .HasForeignKey("HistoryId")
+                        .WithOne("Review")
+                        .HasForeignKey("Retech.Core.Models.Review", "HistoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Retech.Core.Models.User", "Reviewee")
-                        .WithMany("RevieweeReview")
+                    b.HasOne("Retech.Core.Models.User", "Reviewer")
+                        .WithMany("Reviewee")
                         .HasForeignKey("RevieweeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Retech.Core.Models.User", "Reviewer")
-                        .WithMany("ReviewerReview")
+                    b.HasOne("Retech.Core.Models.User", "Reviewee")
+                        .WithMany("Reviewer")
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Retech.Core.Models.User", null)
+                        .WithMany("Review")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("OrderHistory");
 
@@ -1329,7 +1349,8 @@ namespace Retech.DataAccess.Migrations
 
             modelBuilder.Entity("Retech.Core.Models.OrderHistory", b =>
                 {
-                    b.Navigation("Review");
+                    b.Navigation("Review")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Product", b =>
@@ -1380,9 +1401,11 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("ReceivedMessages");
 
-                    b.Navigation("RevieweeReview");
+                    b.Navigation("Review");
 
-                    b.Navigation("ReviewerReview");
+                    b.Navigation("Reviewee");
+
+                    b.Navigation("Reviewer");
 
                     b.Navigation("Seller");
 

@@ -21,8 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasConversion<string>();  // Store enum as string in the database
 
-           
-
             builder.Property(dv => dv.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()");  // Default value for CreatedAt (UTC now)
 

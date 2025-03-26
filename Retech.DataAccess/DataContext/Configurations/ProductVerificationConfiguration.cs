@@ -16,9 +16,10 @@ namespace Retech.DataAccess.DataContext.Configurations
             // Primary Key
             builder.HasKey(pv => pv.ProductVerificationId);
             // Properties
-          
-            builder.Property(pv => pv.VerificationResult)
-                .HasMaxLength(1000);  // Assuming the result is a string and needs a max length
+
+            builder.Property(p => p.VerificationResult)
+                   .HasColumnType("float")
+                   .HasDefaultValue(0);
 
             builder.Property(pv => pv.CreateAt)
                 .HasDefaultValueSql("GETUTCDATE()");  // Auto set the created date to UTC now

@@ -27,7 +27,6 @@ namespace Retech.Core.Models
         public E_Wallet EWallet { get; set; }
         public ShoppingCart ShoppingCart { get; set; }
         public ICollection<Product> Product { get; set; } = new List<Product>();
-        public ICollection<Review> Review { get; set; } = new List<Review>();
         public ICollection<ExchangeRequest> UserOfferId { get; set; } = new List<ExchangeRequest>();
         public ICollection<ExchangeRequest> UserResponseId { get; set; } = new List<ExchangeRequest>();
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
@@ -35,8 +34,8 @@ namespace Retech.Core.Models
         public ICollection<Notification> Notification { get; set; } = new List<Notification>();
         public ICollection<DeviceVerificationForm> DeviceVerificationForm { get; set; } = new List<DeviceVerificationForm>();
         public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
-        public ICollection<Review> Reviewer { get; set; } = new List<Review>();
-        public ICollection<Review> Reviewee { get; set; } = new List<Review>();
+        public ICollection<Review> ReviewerReview { get; set; } = new List<Review>();
+        public ICollection<Review> RevieweeReview { get; set; } = new List<Review>();
         public ICollection<ProductVerification> ProductVerification { get; set; } = new List<ProductVerification>();
         public UserSubscription UserSubscription { get; set; }
         public ICollection<Transaction> Buyer { get; set; } = new List<Transaction>();

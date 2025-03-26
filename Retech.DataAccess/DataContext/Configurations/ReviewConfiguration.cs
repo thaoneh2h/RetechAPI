@@ -21,27 +21,15 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasMaxLength(500);  // Max length for comment
 
-            builder.Property(r => r.Rating)
-                   .IsRequired()
-                   .HasDefaultValue(1);  // Default to 1 if no rating is provided (adjust this as needed)
+            builder.Property(p => p.Rating)
+                   .HasColumnType("float")
+                   .HasDefaultValue(0);
 
             builder.Property(r => r.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()");  // Defaults to UTC now when the review is created
 
             // Relationships
-            builder.HasOne(r => r.Reviewer)
-                   .WithMany(u => u.Review)  // Assuming User has a collection of Reviews
-                   .HasForeignKey(r => r.ReviewerId)
-                   .OnDelete(DeleteBehavior.Cascade);  // Delete reviews if the user is deleted
-            builder.HasOne(r => r.Reviewee)
-                    .WithMany(u => u.Review)  // Assuming User has a collection of Reviews
-                    .HasForeignKey(r => r.RevieweeId)
-                    .OnDelete(DeleteBehavior.Cascade);  // Delete reviews if the user is deleted
 
-            builder.HasOne(r => r.OrderHistory)
-                   .WithOne(th => th.Review)  // One-to-one relationship
-                   .HasForeignKey<OrderHistory>(th => th.ReviewId)  // Foreign Key in TransactionHistory pointing to Review
-                   .OnDelete(DeleteBehavior.SetNull);  // Set ReviewId to null if the transaction is deleted
 
             // Table name
             builder.ToTable("Review");

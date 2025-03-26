@@ -50,7 +50,9 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasMaxLength(20);
 
             builder.Property(u => u.Rating)
-                .HasColumnType("decimal(5,2)");
+                .HasColumnType("float")
+                .HasDefaultValue(0);
+
 
             builder.Property(u => u.KycVerified)
                 .HasDefaultValue(false);
@@ -66,13 +68,13 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(u => u.Reviewer)
-                .WithOne(r => r.Reviewee)
+            builder.HasMany(u => u.ReviewerReview)
+                .WithOne(r => r.Reviewer)
                 .HasForeignKey(r => r.ReviewerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(u => u.Reviewee)
-                .WithOne(r => r.Reviewer)
+            builder.HasMany(u => u.RevieweeReview)
+                .WithOne(r => r.Reviewee)
                 .HasForeignKey(r => r.RevieweeId)
                 .OnDelete(DeleteBehavior.Restrict);
 

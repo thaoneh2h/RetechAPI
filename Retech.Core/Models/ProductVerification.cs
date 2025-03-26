@@ -14,7 +14,7 @@ namespace Retech.Core.Models
         public Guid ProductId { get; set; }
         public Guid UserId { get; set; }
         public string VerificationStatus { get; set; } //enum: pending, in progress, completed
-        public string VerificationResult { get; set; }
+        public float VerificationResult { get; set; }
         public DateTime CreateAt { get; set; }
         //relationships
         public User User { get; set; }

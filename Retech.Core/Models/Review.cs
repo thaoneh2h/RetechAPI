@@ -10,7 +10,7 @@ namespace Retech.Core.Models
         public Guid RevieweeId { get; set; }
         public Guid HistoryId { get; set; }
         public string Comment { get; set; }
-        public string Rating { get; set; }
+        public float Rating { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
         public User Reviewer { get; set; }
