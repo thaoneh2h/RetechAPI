@@ -21,20 +21,22 @@ namespace Retech.DataAccess.Repositories
         public async Task<Transaction> GetByIdAsync(Guid transactionId)
         {
             return await _context.Transaction
-                .Include(t => t.Buyer)
-                .Include(t => t.Seller)
-                .Include(t => t.Product)
-                .Include(t => t.EWallet)
+                .Include(t => t.Participant1) 
+                .Include(t => t.Participant2)
+                .Include(t => t.Order)
+                .Include(t => t.ExchangeRequest)
+                .Include(t => t.Payment)
                 .FirstOrDefaultAsync(t => t.TransactionId == transactionId);
         }
 
         public async Task<IEnumerable<Transaction>> GetAllAsync()
         {
             return await _context.Transaction
-                .Include(t => t.Buyer)
-                .Include(t => t.Seller)
-                .Include(t => t.Product)
-                .Include(t => t.EWallet)
+                .Include(t => t.Participant1)
+                .Include(t => t.Participant2)
+                .Include(t => t.Order)
+                .Include(t => t.ExchangeRequest)
+                .Include(t => t.Payment)
                 .ToListAsync();
         }
 
@@ -62,10 +64,11 @@ namespace Retech.DataAccess.Repositories
         public async Task<IEnumerable<Transaction>> GetTransactionsByUserIdAsync(Guid userId)
         {
             return await _context.Transaction
-                .Where(t => t.BuyerId == userId || t.SellerId == userId)  // Lọc theo BuyerId hoặc SellerId
-                .Include(t => t.Product)
-                .Include(t => t.Buyer)
-                .Include(t => t.Seller)
+                .Where(t => t.Participant1Id == userId || t.Participant2Id == userId) // Filter by Participant1Id or Participant2Id
+                .Include(t => t.Order)
+                .Include(t => t.Participant1)
+                .Include(t => t.Participant2)
+                .Include(t => t.Payment)
                 .ToListAsync();
         }
     }

@@ -38,7 +38,8 @@ namespace Retech.Core.Models
         public ICollection<Review> RevieweeReview { get; set; } = new List<Review>();
         public ICollection<ProductVerification> ProductVerification { get; set; } = new List<ProductVerification>();
         public UserSubscription UserSubscription { get; set; }
-        public ICollection<Transaction> Buyer { get; set; } = new List<Transaction>();
-        public ICollection<Transaction> Seller { get; set; } = new List<Transaction>();
+        public ICollection<Transaction> ParticipantId1 { get; set; } = new List<Transaction>();
+        public ICollection<Transaction> ParticipantId2 { get; set; } = new List<Transaction>();
+        public ICollection<Bank> Bank { get; set; }= new List<Bank>();
     }
 }

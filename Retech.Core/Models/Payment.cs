@@ -6,9 +6,9 @@ namespace Retech.Core.Models
     {
         [Key]
         public Guid PaymentId { get; set; }
-        public Guid? OrderId { get; set; }
+        public Guid TransactionId { get; set; }
         public Guid? WalletId { get; set; }
-        public Guid? ExchangeRequestId { get; set; }
+        public Guid? BankId { get; set; }    
         public Guid? SubscriptionId { get; set; }
         public decimal FeePercentage { get; set; }
         public decimal Amount { get; set; }
@@ -17,9 +17,9 @@ namespace Retech.Core.Models
         public DateTime TransactionDate { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
-        public Order Order { get; set; }
-        public ExchangeRequest ExchangeRequest { get; set; }
         public UserSubscription UserSubscription { get; set; }
         public E_Wallet EWallet { get; set; }
+        public Transaction Transaction { get; set; }
+        public Bank Bank { get; set; }
     }
 }

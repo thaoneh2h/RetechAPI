@@ -11,10 +11,10 @@ namespace Retech.Core.Models
     {
         [Key]
         public Guid TransactionId { get; set; }
-        public Guid BuyerId { get; set; }
-        public Guid SellerId { get; set; }
-        public Guid ProductId { get; set; }
-        public Guid? WalletId { get; set; }
+        public Guid Participant1Id { get; set; }
+        public Guid Participant2Id { get; set; }
+        public Guid? OrderId { get; set; }
+        public Guid? ExchangeRequestId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string TransactionType { get; set; } // Buy, Sell, Exchange
@@ -22,10 +22,12 @@ namespace Retech.Core.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships
-        public User Buyer { get; set; }
-        public User Seller { get; set; }
-        public Product Product { get; set; }
-        public E_Wallet EWallet { get; set; }
+        public User Participant1 { get; set; }
+        public User Participant2 { get; set; }
+        public ICollection<Payment> Payment { get; set; } = new List<Payment>();
+        public Order Order { get; set; }
+        public ExchangeRequest ExchangeRequest { get; set; }
+
 
     }
 

@@ -33,6 +33,7 @@ namespace Retech.DataAccess.DataContext
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<Bank> Bank { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

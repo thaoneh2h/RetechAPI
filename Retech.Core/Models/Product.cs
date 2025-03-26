@@ -30,6 +30,5 @@ namespace Retech.Core.Models
         public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
         public ICollection<ShoppingCart> ShoppingCart { get; } = new List<ShoppingCart>();
         public ProductVerification ProductVerification { get; set; }
-        public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
     }
 }

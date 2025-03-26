@@ -9,10 +9,10 @@ namespace Retech.Core.DTOS
     public class TransactionDTO
     {
         public Guid TransactionId { get; set; }
-        public Guid BuyerId { get; set; }
-        public Guid SellerId { get; set; }
-        public Guid ProductId { get; set; }
-        public Guid? WalletId { get; set; }
+        public Guid Participant1Id { get; set; }
+        public Guid Participant2Id { get; set; }
+        public Guid OrderId { get; set; }
+        public Guid? ExchangeRequestId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string TransactionType { get; set; } // Buy, Sell, Exchange

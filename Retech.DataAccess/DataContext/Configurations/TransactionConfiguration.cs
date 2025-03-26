@@ -37,24 +37,24 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .IsRequired();
 
             // Relationships
-            builder.HasOne(r => r.Buyer)
-                .WithMany(u => u.Buyer)
-                .HasForeignKey(r => r.BuyerId)
+            builder.HasOne(r => r.Participant1)
+                .WithMany(u => u.ParticipantId1)
+                .HasForeignKey(r => r.Participant1Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete for Buyer
 
-            builder.HasOne(r => r.Seller)
-                .WithMany(u => u.Seller)
-                .HasForeignKey(r => r.SellerId)
+            builder.HasOne(r => r.Participant2)
+                .WithMany(u => u.ParticipantId2)
+                .HasForeignKey(r => r.Participant2Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete for Seller
 
-            builder.HasOne(r => r.Product)
+            builder.HasOne(r => r.Order)
                 .WithMany(p => p.Transaction)
-                .HasForeignKey(r => r.ProductId)
+                .HasForeignKey(r => r.OrderId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete for Product
 
-            builder.HasOne(r => r.EWallet)
+            builder.HasOne(r => r.ExchangeRequest)
                 .WithMany(e => e.Transaction)
-                .HasForeignKey(r => r.WalletId)
+                .HasForeignKey(r => r.ExchangeRequestId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete for E_Wallet
 
             // Table name

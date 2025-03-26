@@ -22,6 +22,7 @@ namespace Retech.Core.Models
         public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
         public Shipping Shipping { get; set; }
         public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();
+        public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
     }
 
 }
