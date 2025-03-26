@@ -56,7 +56,9 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
+builder.Services.AddScoped<IProductVerificationRepository, ProductVerificationRepository>();
+builder.Services.AddScoped<IDeviceVerificationFormRepository, DeviceVerificationFormRepository>();
+builder.Services.AddScoped<IProductVerificationService, ProductVerificationService>();
 
 builder.Services.AddControllers(); // Thêm các controller
 builder.Services.AddEndpointsApiExplorer(); // Cấu hình Swagger

@@ -27,10 +27,11 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasDefaultValueSql("GETUTCDATE()");  // Auto set the created date to UTC now
 
             // Relationships
-            builder.HasOne(pv => pv.Product)
-                .WithOne(p => p.ProductVerification)  // Assuming Product has a one-to-one relationship with ProductVerification
-                .HasForeignKey<ProductVerification>(pv => pv.ProductId)  // ProductVerification has a foreign key to Product
-                .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of Product if it's in ProductVerification
+
+            builder.HasOne(dv => dv.Product)
+                .WithMany(p => p.ProductVerification)
+                .HasForeignKey(dv => dv.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(pv => pv.User)
                 .WithMany(u => u.ProductVerification)  // Assuming User can have many ProductVerifications

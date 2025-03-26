@@ -20,23 +20,27 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(dv => dv.FormStatus)
                    .IsRequired()
                    .HasConversion<string>();  // Store enum as string in the database
+            builder.Property(dv => dv.Location)
+                   .IsRequired()
+                   .HasMaxLength(255);
 
             builder.Property(dv => dv.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()");  // Default value for CreatedAt (UTC now)
 
             // Relationships
             builder.HasOne(dv => dv.Product)
-                    .WithOne(p => p.DeviceVerificationForm)  // Assuming Product has one DeviceVerification
-                    .HasForeignKey<DeviceVerificationForm>(dv => dv.ProductId)  // DeviceVerification has a foreign key to Product
-                     .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of Product if it’s in DeviceVerification
+                   .WithMany(p => p.DeviceVerificationForm) 
+                   .HasForeignKey(dv => dv.ProductId)
+                   .OnDelete(DeleteBehavior.Restrict);  
 
             builder.HasOne(dv => dv.User)
-                   .WithMany(u => u.DeviceVerificationForm)  // Assuming User can have many DeviceVerifications
+                   .WithMany(u => u.DeviceVerificationForm)
                    .HasForeignKey(dv => dv.UserId)
-                   .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of User if it’s in DeviceVerification
+                   .OnDelete(DeleteBehavior.Restrict);
 
             // Table name
             builder.ToTable("DeviceVerificationForm");
         }
     }
+
 }

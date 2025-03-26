@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326162546_AddLocation")]
+    partial class AddLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,7 +110,8 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasKey("VerificationSubmitId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -553,7 +557,8 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasKey("ProductVerificationId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -976,8 +981,8 @@ namespace Retech.DataAccess.Migrations
             modelBuilder.Entity("Retech.Core.Models.DeviceVerificationForm", b =>
                 {
                     b.HasOne("Retech.Core.Models.Product", "Product")
-                        .WithMany("DeviceVerificationForm")
-                        .HasForeignKey("ProductId")
+                        .WithOne("DeviceVerificationForm")
+                        .HasForeignKey("Retech.Core.Models.DeviceVerificationForm", "ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1212,8 +1217,8 @@ namespace Retech.DataAccess.Migrations
             modelBuilder.Entity("Retech.Core.Models.ProductVerification", b =>
                 {
                     b.HasOne("Retech.Core.Models.Product", "Product")
-                        .WithMany("ProductVerification")
-                        .HasForeignKey("ProductId")
+                        .WithOne("ProductVerification")
+                        .HasForeignKey("Retech.Core.Models.ProductVerification", "ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1414,13 +1419,15 @@ namespace Retech.DataAccess.Migrations
 
             modelBuilder.Entity("Retech.Core.Models.Product", b =>
                 {
-                    b.Navigation("DeviceVerificationForm");
+                    b.Navigation("DeviceVerificationForm")
+                        .IsRequired();
 
                     b.Navigation("OfferedExchange");
 
                     b.Navigation("OrderItem");
 
-                    b.Navigation("ProductVerification");
+                    b.Navigation("ProductVerification")
+                        .IsRequired();
 
                     b.Navigation("RequestedExchange");
 

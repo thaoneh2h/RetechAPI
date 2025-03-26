@@ -10,6 +10,7 @@ namespace Retech.Core.Models
         public Guid UserId { get; set; }
         public DateTime VerificationDate {  get; set; } 
         public string FormStatus { get; set; } // enum: Pending, In Progress, Completed, Failed
+        public string Location { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
         public Product Product { get; set; }

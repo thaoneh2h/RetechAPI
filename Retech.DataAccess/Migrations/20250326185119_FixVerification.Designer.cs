@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326185119_FixVerification")]
+    partial class FixVerification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -553,7 +556,8 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasKey("ProductVerificationId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -1212,8 +1216,8 @@ namespace Retech.DataAccess.Migrations
             modelBuilder.Entity("Retech.Core.Models.ProductVerification", b =>
                 {
                     b.HasOne("Retech.Core.Models.Product", "Product")
-                        .WithMany("ProductVerification")
-                        .HasForeignKey("ProductId")
+                        .WithOne("ProductVerification")
+                        .HasForeignKey("Retech.Core.Models.ProductVerification", "ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1420,7 +1424,8 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("OrderItem");
 
-                    b.Navigation("ProductVerification");
+                    b.Navigation("ProductVerification")
+                        .IsRequired();
 
                     b.Navigation("RequestedExchange");
 

@@ -69,7 +69,7 @@ namespace Retech.API.Controllers
             return Ok(product);
         }
 
-        [HttpGet]
+        [HttpGet("category")]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] string category = null)
         {
             var products = await _productService.GetProductsByCategoryAsync(category);

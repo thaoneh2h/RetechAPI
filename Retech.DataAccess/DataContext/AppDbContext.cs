@@ -29,7 +29,7 @@ namespace Retech.DataAccess.DataContext
         public DbSet<DeviceVerificationForm> DeviceVerificationForm { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
-        public DbSet<ProductVerification> ProductVerifications { get; set; }
+        public DbSet<ProductVerification> ProductVerification { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Transaction> Transaction { get; set; }

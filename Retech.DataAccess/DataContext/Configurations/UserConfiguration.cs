@@ -110,10 +110,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .WithOne(n => n.User)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(u => u.DeviceVerificationForm)
-                .WithOne(n => n.User)
-                .HasForeignKey(n => n.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasMany(u => u.UserAddresses)  // Assuming User class has a collection property UserAddresses
                    .WithOne(ua => ua.User)
                    .HasForeignKey(ua => ua.UserId)

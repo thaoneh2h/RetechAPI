@@ -33,6 +33,15 @@ namespace Retech.Core
             CreateMap<Product, ProductDTO>();
             CreateMap<ProductDTO, Product>();
 
+
+
+            CreateMap<ProductVerification, ProductVerificationDTO>(); 
+            CreateMap<ProductVerificationDTO, ProductVerification>();
+            CreateMap<DeviceVerificationForm, DeviceVerificationFormDTO>();
+            CreateMap<DeviceVerificationFormDTO, DeviceVerificationForm>();
+
+
+
         }
     }
 }
