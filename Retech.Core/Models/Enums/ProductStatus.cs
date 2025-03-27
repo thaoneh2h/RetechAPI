@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Retech.Core.Models.Enums
 {
-    public enum VerificationStatus
+    public enum ProductStatus
     {
-        Pending,
-        Completed,
-        Rejected
+        Verified, 
+        NotVerified
     }
 }

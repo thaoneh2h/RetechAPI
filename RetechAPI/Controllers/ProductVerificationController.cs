@@ -31,11 +31,16 @@ namespace Retech.API.Controllers
         [HttpPut("complete/{productId}")]
         public async Task<ActionResult> CompleteVerification(Guid productId, [FromBody] ProductVerificationDTO verificationResult)
         {
-            // Call service to complete the verification
-            await _productVerificationService.CompleteVerificationAsync(productId, verificationResult);
-
-            // Return NoContent after successful update
-            return NoContent();
+            try
+            {
+                // Call service to complete the verification
+                await _productVerificationService.CompleteVerificationAsync(productId, verificationResult);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // API to get the verification result of a product

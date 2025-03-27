@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Retech.Core.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Retech.Core.Models
 {
@@ -15,11 +16,15 @@ namespace Retech.Core.Models
         public int ModelYear { get; set; }
         public string RepairHistory { get; set; }
         public string Condition { get; set; } // Enum: New, Like New, Used
-        public string ProductStatus { get; set; } // Enum: Available, Out of Stock
+        public string ProductStatus { get; set; } // Enum: Verified, Not Verified
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public string Images { get; set; } // JSON lưu danh sách ảnh
         public int Stock { get; set; }
+        
+        [EnumDataType(typeof(ProductStatus))]
+        public ProductStatus ProductStatusEnum { get; set; }
+
         // Relationships
         public User User { get; set; }
         public Category Category { get; set; }
@@ -29,5 +34,7 @@ namespace Retech.Core.Models
         public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
         public ICollection<ShoppingCart> ShoppingCart { get; } = new List<ShoppingCart>();
         public ICollection<ProductVerification> ProductVerification { get; set; } = new List<ProductVerification>();
+       
+      
     }
 }

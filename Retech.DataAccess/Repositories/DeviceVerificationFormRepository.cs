@@ -30,5 +30,11 @@ namespace Retech.DataAccess.Repositories
             return await _context.DeviceVerificationForm
                                  .FirstOrDefaultAsync(dvf => dvf.ProductId == productId);
         }
+        public async Task UpdateAsync(DeviceVerificationForm deviceVerificationForm)
+        {
+            _context.DeviceVerificationForm.Update(deviceVerificationForm);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

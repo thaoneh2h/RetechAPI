@@ -49,26 +49,41 @@ namespace Retech.Application.Services
         // Method to complete the verification (staff updates result)
         public async Task CompleteVerificationAsync(Guid productId, ProductVerificationDTO verificationResult)
         {
+            // Retrieve the product details
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null) throw new Exception("Product not found");
 
+            // Retrieve the related DeviceVerificationForm
+            var deviceVerificationForm = await _deviceVerificationFormRepository.GetByProductIdAsync(productId);
+            if (deviceVerificationForm == null) throw new Exception("Device verification form not found");
+
+            // Create a new product verification entry
             var verification = new ProductVerification
             {
                 ProductId = productId,
                 UserId = verificationResult.UserId,
-                VerificationStatus = verificationResult.VerificationStatus,
-                VerificationResult = verificationResult.VerificationResult,
-                SuggestPrice = verificationResult.SuggestPrice,
+                VerificationStatus = "Completed",  // Mark as completed
+                VerificationResult = verificationResult.VerificationResult,  // Store verification result
+                SuggestPrice = verificationResult.SuggestPrice,  // Suggested price to update selling price
                 CreateAt = DateTime.UtcNow
             };
 
             // Add verification result
             await _productVerificationRepository.AddAsync(verification);
 
-            // Update product status
-            product.ProductStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "Not Verified";
+            // Update the product status and price
+            product.ProductStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "NotVerified";
+            product.SellingPrice = verificationResult.SuggestPrice;  // Update selling price with suggested price
+            product.Evaluate = verificationResult.VerificationResult;
 
+            // Save changes to the product
             await _productRepository.UpdateAsync(product);
+
+            // Update the device verification form's status
+            deviceVerificationForm.FormStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "Rejected";
+
+            // Save changes to the device verification form
+            await _deviceVerificationFormRepository.UpdateAsync(deviceVerificationForm);
         }
 
         // Get verification result for a product

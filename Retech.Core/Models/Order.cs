@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Retech.Core.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Retech.Core.Models
 {
@@ -14,6 +15,10 @@ namespace Retech.Core.Models
         public decimal TotalPrice { get; set; }
         public string OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        
+        [EnumDataType(typeof(OrderStatus))]
+        public OrderStatus OrderStatusEnum { get; set; }
+
         // Relationships
         public User Buyer { get; set; }
         public User Seller { get; set; }
