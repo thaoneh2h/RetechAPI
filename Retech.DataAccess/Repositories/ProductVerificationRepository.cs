@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Retech.Core.Models;
 using Retech.DataAccess.DataContext;
+using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

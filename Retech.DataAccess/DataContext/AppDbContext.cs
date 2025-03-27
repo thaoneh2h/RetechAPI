@@ -13,7 +13,6 @@ namespace Retech.DataAccess.DataContext
 
         public DbSet<User> User { get; set; }
         public DbSet<Voucher> Voucher { get; set; }
-        public DbSet<OrderHistory> OrderHistory { get; set; }
         public DbSet<ThirdPartyProvider> ThirdPartyProvider { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<Shipping> Shipping { get; set; }
@@ -42,7 +41,6 @@ namespace Retech.DataAccess.DataContext
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new VoucherConfiguration());
             modelBuilder.ApplyConfiguration(new UserAddressConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new ThirdPartyProviderConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());

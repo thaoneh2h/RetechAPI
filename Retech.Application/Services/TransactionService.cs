@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Retech.Application.Services;
+using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
-using Retech.DataAccess.Repositories;
+using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

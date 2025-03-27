@@ -52,10 +52,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasForeignKey(o => o.WalletId)
                    .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of wallet if order exists
 
-            builder.HasMany(w => w.OrderHistory)
-                   .WithOne(th => th.EWallet)  // One wallet can have many transaction histories
-                   .HasForeignKey(th => th.WalletId)
-                   .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of wallet if transaction history exists
 
             // Table name
             builder.ToTable("E_Wallet");

@@ -7,6 +7,8 @@ using Retech.DataAccess.Repositories;
 using Retech.DataAccess.DataContext;
 using Retech.Core;
 using Retech.Core.Services;
+using Retech.Application.Services.Interfaces;
+using Retech.DataAccess.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +61,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductVerificationRepository, ProductVerificationRepository>();
 builder.Services.AddScoped<IDeviceVerificationFormRepository, DeviceVerificationFormRepository>();
 builder.Services.AddScoped<IProductVerificationService, ProductVerificationService>();
+
+
+
+
 
 builder.Services.AddControllers(); // Thêm các controller
 builder.Services.AddEndpointsApiExplorer(); // Cấu hình Swagger

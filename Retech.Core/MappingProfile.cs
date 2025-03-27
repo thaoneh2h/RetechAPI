@@ -41,7 +41,6 @@ namespace Retech.Core
             CreateMap<DeviceVerificationFormDTO, DeviceVerificationForm>();
 
 
-
         }
     }
 }

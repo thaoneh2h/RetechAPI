@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
-using Retech.DataAccess.Repositories;
+using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Retech.Application.Services
 {
-        public class OrderService : IOrderService
+    public class OrderService : IOrderService
         {
             private readonly IOrderRepository _orderRepository;
             private readonly IMapper _mapper;

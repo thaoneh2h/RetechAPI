@@ -30,7 +30,6 @@ namespace Retech.DataAccess.DataContext.Configurations
 
             // Relationships
 
-
             // Table name
             builder.ToTable("Review");
         }

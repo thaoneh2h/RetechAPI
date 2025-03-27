@@ -56,7 +56,10 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .WithOne(s => s.Order)  // Assuming one-to-one relationship with Shipping
                    .HasForeignKey<Shipping>(s => s.OrderId)
                    .OnDelete(DeleteBehavior.Cascade);  // Delete shipping if the order is deleted
-
+            builder.HasMany(u => u.Review)  
+                   .WithOne(ua => ua.Order)
+                   .HasForeignKey(ua => ua.OrderId)
+                   .OnDelete(DeleteBehavior.Restrict);
             // Table name
             builder.ToTable("Order");
         }

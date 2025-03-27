@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Retech.Application.Services;
+using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 
 namespace Retech.API.Controllers
