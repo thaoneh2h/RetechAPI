@@ -11,7 +11,7 @@ namespace Retech.Core.Models
         public decimal DiscountValue { get; set; } // Giá trị giảm giá
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
-        public string Status { get; set; } // Enum: Active, Expired
+        public string VoucherStatus { get; set; } // Enum: Active, Expired
         // Relationships
         public User User { get; set; }
         public Order Order { get; set; }

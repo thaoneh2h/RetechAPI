@@ -15,7 +15,7 @@ namespace Retech.Core.Models
         public int ModelYear { get; set; }
         public string RepairHistory { get; set; }
         public string Condition { get; set; } // Enum: New, Like New, Used
-        public string Status { get; set; } // Enum: Available, Out of Stock
+        public string ProductStatus { get; set; } // Enum: Available, Out of Stock
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public string Images { get; set; } // JSON lưu danh sách ảnh

@@ -28,7 +28,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .IsRequired();
 
             // Enum configurations
-            builder.Property(v => v.Status)
+            builder.Property(v => v.VoucherStatus)
                 .HasConversion<string>() // Store enum as string if preferred
                 .IsRequired();
 

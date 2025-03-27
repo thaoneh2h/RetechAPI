@@ -12,7 +12,7 @@ namespace Retech.Core.Models
         public Guid? VoucherId { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
-        public string OrderStatus { get; set; } //enum : Placed, Approved, Delivered, Canceled
+        public string OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships
         public User Buyer { get; set; }

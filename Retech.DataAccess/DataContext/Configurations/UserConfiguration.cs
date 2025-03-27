@@ -45,7 +45,7 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(u => u.RegistrationDate)
                 .IsRequired();
 
-            builder.Property(u => u.Status)
+            builder.Property(u => u.UserStatus)
                 .IsRequired()
                 .HasMaxLength(20);
 

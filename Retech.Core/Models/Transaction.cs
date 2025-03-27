@@ -18,7 +18,7 @@ namespace Retech.Core.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string TransactionType { get; set; } // Buy, Sell, Exchange
-        public string TransactionStatus { get; set; } // Pending, Processing, Completed, Canceled
+        public string TransactionStatus { get; set; } // Pending, Completed, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships

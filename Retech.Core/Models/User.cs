@@ -16,7 +16,7 @@ namespace Retech.Core.Models
         public DateTime BirthDate { get; set; }
         public string ProfilePicture { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public string Status { get; set; }  // Enum: Active, Suspended
+        public string UserStatus { get; set; }  // Enum: Active, Suspended
         public float Rating { get; set; }
         public bool KycVerified { get; set; } = false;
 

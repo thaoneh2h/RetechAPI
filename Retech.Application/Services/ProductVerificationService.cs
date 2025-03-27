@@ -66,7 +66,7 @@ namespace Retech.Application.Services
             await _productVerificationRepository.AddAsync(verification);
 
             // Update product status
-            product.Status = verificationResult.VerificationStatus == "Completed" ? "Verified" : "Not Verified";
+            product.ProductStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "Not Verified";
 
             await _productRepository.UpdateAsync(product);
         }

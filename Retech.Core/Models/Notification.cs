@@ -9,7 +9,7 @@ namespace Retech.Core.Models
         public Guid UserId { get; set; }
         public string NotificationType { get; set; }
         public string Content { get; set; }
-        public string Status { get; set; } // enum: Read, Unread
+        public string NotificationStatus { get; set; } // enum: Read, Unread
         public DateTime SendDate { get; set; } = DateTime.UtcNow;
         // Relationships
         public User User { get; set; }

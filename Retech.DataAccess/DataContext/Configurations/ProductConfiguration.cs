@@ -34,7 +34,7 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(p => p.Condition)
                    .IsRequired();
 
-            builder.Property(p => p.Status)
+            builder.Property(p => p.ProductStatus)
                    .IsRequired();
 
             builder.Property(p => p.Evaluate)

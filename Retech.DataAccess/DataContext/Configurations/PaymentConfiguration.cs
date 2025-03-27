@@ -26,7 +26,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasConversion<string>();  // Store as string in database (enum to string conversion)
 
 
-            builder.Property(p => p.TransactionStatus)
+            builder.Property(p => p.PaymentStatus)
                    .IsRequired()
                    .HasConversion<string>();  // Store as string in database (enum to string conversion)
 

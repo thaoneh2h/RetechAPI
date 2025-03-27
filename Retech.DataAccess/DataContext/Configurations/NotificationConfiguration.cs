@@ -21,7 +21,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasMaxLength(1000);  // Ensure content length is limited
 
-            builder.Property(n => n.Status)
+            builder.Property(n => n.NotificationStatus)
                    .IsRequired()
                    .HasConversion<string>();  // Store enum as string in the database
 
