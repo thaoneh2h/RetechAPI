@@ -16,8 +16,7 @@ namespace Retech.Core.Models
         public string OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
-        [EnumDataType(typeof(OrderStatus))]
-        public OrderStatus OrderStatusEnum { get; set; }
+
 
         // Relationships
         public User Buyer { get; set; }

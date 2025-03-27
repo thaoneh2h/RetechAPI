@@ -22,8 +22,7 @@ namespace Retech.Core.Models
         public string Images { get; set; } // JSON lưu danh sách ảnh
         public int Stock { get; set; }
         
-        [EnumDataType(typeof(ProductStatus))]
-        public ProductStatus ProductStatusEnum { get; set; }
+
 
         // Relationships
         public User User { get; set; }
