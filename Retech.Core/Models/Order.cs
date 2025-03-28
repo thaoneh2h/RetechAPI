@@ -11,7 +11,9 @@ namespace Retech.Core.Models
         public Guid SellerId { get; set; } // Reference to the seller
         public Guid WalletId { get; set; }
         public Guid? VoucherId { get; set; }
+        public Guid ProductId { get; set; }
         public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
         public string OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -24,10 +26,12 @@ namespace Retech.Core.Models
         public ICollection<Payment> Payment { get; set; } = new List<Payment>();
         public Voucher Voucher { get; set; }
         public E_Wallet EWallet { get; set; }
-        public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
+
         public Shipping Shipping { get; set; }
         public ICollection<Transaction> Transaction { get; set; } = new List<Transaction>();
         public ICollection<Review> Review { get; set; } = new List<Review>();
+        public Product Product { get; set; }
+
     }
 
 }

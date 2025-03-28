@@ -16,14 +16,9 @@ namespace Retech.Core
             // Ánh xạ từ Order -> OrderDTO
             CreateMap<Order, OrderDTO>();
 
-            // Ánh xạ từ OrderItem -> OrderItemDTO
-            CreateMap<OrderItem, OrderItemDTO>();
-
             // Ánh xạ từ OrderDTO -> Order
             CreateMap<OrderDTO, Order>();
 
-            // Ánh xạ từ OrderItemDTO -> OrderItem
-            CreateMap<OrderItemDTO, OrderItem>();
             // Ánh xạ từ Transaction -> TransactionDTO
             CreateMap<Transaction, TransactionDTO>();
 

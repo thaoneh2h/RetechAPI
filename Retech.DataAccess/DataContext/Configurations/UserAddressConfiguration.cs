@@ -48,6 +48,10 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .WithMany(u => u.UserAddresses)
                    .HasForeignKey(ua => ua.UserId)
                    .OnDelete(DeleteBehavior.Cascade);  // Consider the business logic; Cascade if deleting User should also delete addresses
+            builder.HasMany(ua => ua.Shipping)
+                   .WithOne(s => s.UserAddress)
+                   .HasForeignKey(s => s.UserAddressId)  // Shipping chứa khóa ngoại trỏ đến UserAddress
+                   .OnDelete(DeleteBehavior.Restrict);
 
             // Table name
             builder.ToTable("UserAddress");

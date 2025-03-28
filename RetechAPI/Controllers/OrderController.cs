@@ -18,30 +18,71 @@ namespace Retech.API.Controllers
         [HttpPost("propose")]
         public async Task<ActionResult> ProposeOrder([FromBody] OrderDTO orderDto)
         {
-            await _orderService.ProposeOrderAsync(orderDto);  // Logic for when a buyer proposes an order
-            return CreatedAtAction(nameof(GetOrderById), new { orderId = orderDto.OrderId }, orderDto);
+            try
+            {
+                await _orderService.ProposeOrderAsync(orderDto);  // Logic for when a buyer proposes an order
+                return CreatedAtAction(nameof(GetOrderById), new { orderId = orderDto.OrderId }, orderDto);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("approve/{orderId}")]
         public async Task<ActionResult> ApproveOrder(Guid orderId)
         {
-            await _orderService.ApproveOrderAsync(orderId);  // Logic for when a seller confirms the order
-            return NoContent();
+            try
+            {
+                await _orderService.ApproveOrderAsync(orderId);  // Logic for when a seller confirms the order
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while approving the order: " + ex.Message });
+            }
         }
 
         [HttpPut("cancel/{orderId}")]
         public async Task<ActionResult> CancelOrder(Guid orderId)
         {
-            await _orderService.CancelOrderAsync(orderId);  // Logic for canceling the order
-            return NoContent();
+            try
+            {
+                await _orderService.CancelOrderAsync(orderId);  // Logic for canceling the order
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while canceling the order: " + ex.Message });
+            }
         }
 
         [HttpPut("complete/{orderId}")]
         public async Task<ActionResult> CompleteOrder(Guid orderId)
         {
-            await _orderService.CompleteOrderAsync(orderId);  // Logic for completing the transaction (could also mark as shipped, etc.)
-            return NoContent();
+            try
+            {
+                await _orderService.CompleteOrderAsync(orderId);  // Logic for completing the transaction (could also mark as shipped, etc.)
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while completing the order: " + ex.Message });
+            }
         }
+
 
 
         [HttpGet("{orderId}")]

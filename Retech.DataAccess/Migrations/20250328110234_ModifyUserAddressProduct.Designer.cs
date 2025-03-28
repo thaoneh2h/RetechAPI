@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retech.DataAccess.DataContext;
 
@@ -11,9 +12,11 @@ using Retech.DataAccess.DataContext;
 namespace Retech.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328110234_ModifyUserAddressProduct")]
+    partial class ModifyUserAddressProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,9 +280,6 @@ namespace Retech.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -287,9 +287,6 @@ namespace Retech.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<Guid?>("VoucherId")
@@ -302,8 +299,6 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasIndex("BuyerId");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("SellerId");
 
                     b.HasIndex("VoucherId")
@@ -313,6 +308,35 @@ namespace Retech.DataAccess.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("Retech.Core.Models.OrderItem", b =>
+                {
+                    b.Property<Guid>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Payment", b =>
@@ -1014,12 +1038,6 @@ namespace Retech.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Retech.Core.Models.Product", "Product")
-                        .WithMany("Order")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Retech.Core.Models.User", "Seller")
                         .WithMany("SellerId")
                         .HasForeignKey("SellerId")
@@ -1041,11 +1059,28 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("EWallet");
 
-                    b.Navigation("Product");
-
                     b.Navigation("Seller");
 
                     b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("Retech.Core.Models.OrderItem", b =>
+                {
+                    b.HasOne("Retech.Core.Models.Order", "Order")
+                        .WithMany("OrderItem")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Retech.Core.Models.Product", "Product")
+                        .WithMany("OrderItem")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Payment", b =>
@@ -1298,6 +1333,8 @@ namespace Retech.DataAccess.Migrations
 
             modelBuilder.Entity("Retech.Core.Models.Order", b =>
                 {
+                    b.Navigation("OrderItem");
+
                     b.Navigation("Payment");
 
                     b.Navigation("Review");
@@ -1314,7 +1351,7 @@ namespace Retech.DataAccess.Migrations
 
                     b.Navigation("OfferedExchange");
 
-                    b.Navigation("Order");
+                    b.Navigation("OrderItem");
 
                     b.Navigation("ProductVerification");
 

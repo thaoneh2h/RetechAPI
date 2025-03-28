@@ -13,6 +13,7 @@
 
         // Mối quan hệ với User
         public User User { get; set; }
+        public ICollection<Shipping> Shipping { get; set; } = new List<Shipping>();
     }
 
 }

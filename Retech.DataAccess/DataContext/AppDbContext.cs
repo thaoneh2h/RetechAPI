@@ -19,7 +19,6 @@ namespace Retech.DataAccess.DataContext
         public DbSet<Review> Review { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Order> Order { get; set; }
-        public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Notification> Notification { get; set; }
         public DbSet<Message> Message { get; set; }
@@ -45,7 +44,6 @@ namespace Retech.DataAccess.DataContext
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new MessageConfiguration());

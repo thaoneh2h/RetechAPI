@@ -20,6 +20,10 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(o => o.Quantity)
                    .IsRequired();
 
+            builder.Property(oi => oi.UnitPrice)
+                    .IsRequired()
+                    .HasColumnType("decimal(18, 2)");
+
             builder.Property(o => o.TotalPrice)
                    .IsRequired()
                    .HasColumnType("decimal(18, 2)");  // Ensure precision for total price
@@ -60,6 +64,10 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .WithOne(ua => ua.Order)
                    .HasForeignKey(ua => ua.OrderId)
                    .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(oi => oi.Product)
+                   .WithMany(p => p.Order)  // Assuming Product has a collection of OrderItems
+                   .HasForeignKey(oi => oi.ProductId)
+                   .OnDelete(DeleteBehavior.Restrict);  // Prevent deletion of Product if it's in an OrderItem
             // Table name
             builder.ToTable("Order");
         }

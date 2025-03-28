@@ -16,6 +16,7 @@ namespace Retech.Core.DTOS
         public decimal OriginalPrice { get; set; }
         public int ModelYear { get; set; }
         public string RepairHistory { get; set; }
+        public string ProductType { get; set; }
         public string Condition { get; set; }
         public string Status { get; set; }
         public float Evaluate { get; set; }

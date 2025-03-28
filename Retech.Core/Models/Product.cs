@@ -15,6 +15,7 @@ namespace Retech.Core.Models
         public decimal OriginalPrice { get; set; }
         public int ModelYear { get; set; }
         public string RepairHistory { get; set; }
+        public string ProductType { get; set; } //Enum: Selling, Exchanging
         public string Condition { get; set; } // Enum: New, Like New, Used
         public string ProductStatus { get; set; } // Enum: Verified, Not Verified
         public float Evaluate { get; set; }
@@ -30,7 +31,7 @@ namespace Retech.Core.Models
         public ICollection<DeviceVerificationForm> DeviceVerificationForm { get; set; } = new List<DeviceVerificationForm>();
         public ICollection<ExchangeRequest> RequestedExchange { get; set; } = new List<ExchangeRequest>();  // Sản phẩm được yêu cầu
         public ICollection<ExchangeRequest> OfferedExchange { get; set; } = new List<ExchangeRequest>();  // Sản phẩm đưa ra trao đổi
-        public ICollection<OrderItem> OrderItem { get; set; } = new List<OrderItem>();
+        public ICollection<Order> Order { get; set; } = new List<Order>();
         public ICollection<ShoppingCart> ShoppingCart { get; } = new List<ShoppingCart>();
         public ICollection<ProductVerification> ProductVerification { get; set; } = new List<ProductVerification>();
        

@@ -22,14 +22,12 @@ namespace Retech.DataAccess.Repositories
         public async Task<Order> GetByIdAsync(Guid orderId)
         {
             return await _context.Order
-                .Include(o => o.OrderItem)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _context.Order
-                .Include(o => o.OrderItem)
                 .ToListAsync();
         }
 
