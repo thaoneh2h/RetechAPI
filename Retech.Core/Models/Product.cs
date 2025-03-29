@@ -15,9 +15,9 @@ namespace Retech.Core.Models
         public decimal OriginalPrice { get; set; }
         public int ModelYear { get; set; }
         public string RepairHistory { get; set; }
-        public string ProductType { get; set; } //Enum: Selling, Exchanging
-        public string Condition { get; set; } // Enum: New, Like New, Used
-        public string ProductStatus { get; set; } // Enum: Verified, Not Verified
+        public ProductType ProductType { get; set; } //Enum: Selling, Exchanging
+        public Condition Condition { get; set; } // Enum: New, Like New, Used
+        public ProductStatus ProductStatus { get; set; } // Enum: Verified, Not Verified
         public float Evaluate { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public string Images { get; set; } // JSON lưu danh sách ảnh

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Retech.Core.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Retech.Core.Models
 {
@@ -9,7 +10,7 @@ namespace Retech.Core.Models
         public Guid ProductId { get; set; }
         public Guid UserId { get; set; }
         public DateTime VerificationDate {  get; set; } 
-        public string FormStatus { get; set; } // enum: Pending, Verified, Rejected
+        public FormStatus FormStatus { get; set; } // enum: Pending, Verified, Rejected
         public string Location { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Relationships

@@ -8,8 +8,8 @@ namespace Retech.Core.Models.Enums
 {
     public enum Condition
     {
-        New, 
-        LikeNew, 
-        Used
+        New=1, 
+        LikeNew=2, 
+        Used=3
     }
 }

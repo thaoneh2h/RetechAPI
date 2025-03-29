@@ -8,8 +8,9 @@ namespace Retech.Core.Models.Enums
 {
     public enum TransactionStatus
     {
-        Pending,
-        Completed,
-        Canceled
+        Pending=1,
+        Processing=2,
+        Completed=3,
+        Canceled=4
     }
 }

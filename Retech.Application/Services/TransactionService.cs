@@ -2,6 +2,7 @@
 using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
+using Retech.Core.Models.Enums;
 using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,7 @@ namespace Retech.Core.Services
         public async Task CreateTransactionAsync(TransactionDTO transactionDto)
         {
             var transaction = _mapper.Map<Transaction>(transactionDto); // Ánh xạ từ TransactionDTO sang Transaction
+            transaction.TransactionStatus = TransactionStatus.Pending;
             await _transactionRepository.AddAsync(transaction);
         }
 
@@ -53,9 +55,9 @@ namespace Retech.Core.Services
         public async Task ConfirmTransactionAsync(Guid transactionId)
         {
             var transaction = await _transactionRepository.GetByIdAsync(transactionId);
-            if (transaction != null && transaction.TransactionStatus == "Pending")
+            if (transaction != null && transaction.TransactionStatus == TransactionStatus.Pending)
             {
-                transaction.TransactionStatus = "Processing";  // Cập nhật trạng thái giao dịch
+                transaction.TransactionStatus = TransactionStatus.Processing;  // Cập nhật trạng thái giao dịch
                 await _transactionRepository.UpdateAsync(transaction);
             }
         }
@@ -63,9 +65,9 @@ namespace Retech.Core.Services
         public async Task CompleteTransactionAsync(Guid transactionId)
         {
             var transaction = await _transactionRepository.GetByIdAsync(transactionId);
-            if (transaction != null && transaction.TransactionStatus == "Processing")
+            if (transaction != null && transaction.TransactionStatus == TransactionStatus.Processing)
             {
-                transaction.TransactionStatus = "Completed";  // Cập nhật trạng thái giao dịch
+                transaction.TransactionStatus = TransactionStatus.Completed;  // Cập nhật trạng thái giao dịch
                 await _transactionRepository.UpdateAsync(transaction);
             }
         }
@@ -73,9 +75,9 @@ namespace Retech.Core.Services
         public async Task CancelTransactionAsync(Guid transactionId)
         {
             var transaction = await _transactionRepository.GetByIdAsync(transactionId);
-            if (transaction != null && transaction.TransactionStatus == "Pending")
+            if (transaction != null)
             {
-                transaction.TransactionStatus = "Canceled";  // Cập nhật trạng thái giao dịch
+                transaction.TransactionStatus = TransactionStatus.Canceled;  // Cập nhật trạng thái giao dịch
                 await _transactionRepository.UpdateAsync(transaction);
             }
         }

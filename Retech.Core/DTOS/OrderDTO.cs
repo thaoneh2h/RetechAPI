@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Retech.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Retech.Core.DTOS
@@ -16,7 +18,8 @@ namespace Retech.Core.DTOS
         public Guid ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
-        public string OrderStatus { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public OrderStatus OrderStatus { get; set; }
         public DateTime CreatedAt { get; set; }
 
     }

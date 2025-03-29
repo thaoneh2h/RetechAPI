@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Retech.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Retech : Migration
+    public partial class UpdateDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,7 +69,7 @@ namespace Retech.DataAccess.Migrations
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProfilePicture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    UserStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
                     KycVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
@@ -159,7 +159,7 @@ namespace Retech.DataAccess.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NotificationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SendDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
@@ -186,8 +186,9 @@ namespace Retech.DataAccess.Migrations
                     OriginalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ModelYear = table.Column<int>(type: "int", nullable: false),
                     RepairHistory = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductType = table.Column<int>(type: "int", nullable: false),
+                    Condition = table.Column<int>(type: "int", nullable: false),
+                    ProductStatus = table.Column<int>(type: "int", nullable: false),
                     Evaluate = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     Images = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
@@ -271,7 +272,7 @@ namespace Retech.DataAccess.Migrations
                     DiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ValidTo = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    VoucherStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +293,7 @@ namespace Retech.DataAccess.Migrations
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VerificationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FormStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FormStatus = table.Column<int>(type: "int", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
@@ -362,7 +363,7 @@ namespace Retech.DataAccess.Migrations
                     ProductVerificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VerificationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationStatus = table.Column<int>(type: "int", nullable: false),
                     VerificationResult = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
                     SuggestPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
@@ -419,9 +420,11 @@ namespace Retech.DataAccess.Migrations
                     SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
@@ -432,6 +435,12 @@ namespace Retech.DataAccess.Migrations
                         column: x => x.WalletId,
                         principalTable: "E_Wallet",
                         principalColumn: "WalletId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Order_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Order_User_BuyerId",
@@ -454,33 +463,6 @@ namespace Retech.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
-                columns: table => new
-                {
-                    OrderItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItem", x => x.OrderItemId);
-                    table.ForeignKey(
-                        name: "FK_OrderItem_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItem_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Review",
                 columns: table => new
                 {
@@ -500,7 +482,7 @@ namespace Retech.DataAccess.Migrations
                         column: x => x.OrderId,
                         principalTable: "Order",
                         principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Review_User_RevieweeId",
                         column: x => x.RevieweeId,
@@ -522,7 +504,8 @@ namespace Retech.DataAccess.Migrations
                     ShippingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ThirdPartyProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShippingStatus = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShippingStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EstimatedDeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ActualDeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -544,6 +527,12 @@ namespace Retech.DataAccess.Migrations
                         principalTable: "ThirdPartyProvider",
                         principalColumn: "ProviderId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Shipping_UserAddress_UserAddressId",
+                        column: x => x.UserAddressId,
+                        principalTable: "UserAddress",
+                        principalColumn: "UserAddressId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -557,8 +546,8 @@ namespace Retech.DataAccess.Migrations
                     ExchangeRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    TransactionType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    TransactionStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    TransactionType = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    TransactionStatus = table.Column<int>(type: "int", maxLength: 20, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
@@ -602,7 +591,7 @@ namespace Retech.DataAccess.Migrations
                     FeePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ExchangeRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -708,6 +697,11 @@ namespace Retech.DataAccess.Migrations
                 column: "BuyerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_ProductId",
+                table: "Order",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_SellerId",
                 table: "Order",
                 column: "SellerId");
@@ -723,16 +717,6 @@ namespace Retech.DataAccess.Migrations
                 name: "IX_Order_WalletId",
                 table: "Order",
                 column: "WalletId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_OrderId",
-                table: "OrderItem",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ProductId",
-                table: "OrderItem",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_BankId",
@@ -816,6 +800,11 @@ namespace Retech.DataAccess.Migrations
                 column: "ThirdPartyProviderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Shipping_UserAddressId",
+                table: "Shipping",
+                column: "UserAddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCart_ProductId",
                 table: "ShoppingCart",
                 column: "ProductId");
@@ -887,9 +876,6 @@ namespace Retech.DataAccess.Migrations
                 name: "Notification");
 
             migrationBuilder.DropTable(
-                name: "OrderItem");
-
-            migrationBuilder.DropTable(
                 name: "Payment");
 
             migrationBuilder.DropTable(
@@ -905,9 +891,6 @@ namespace Retech.DataAccess.Migrations
                 name: "ShoppingCart");
 
             migrationBuilder.DropTable(
-                name: "UserAddress");
-
-            migrationBuilder.DropTable(
                 name: "Bank");
 
             migrationBuilder.DropTable(
@@ -920,6 +903,9 @@ namespace Retech.DataAccess.Migrations
                 name: "ThirdPartyProvider");
 
             migrationBuilder.DropTable(
+                name: "UserAddress");
+
+            migrationBuilder.DropTable(
                 name: "ExchangeRequest");
 
             migrationBuilder.DropTable(
@@ -929,10 +915,10 @@ namespace Retech.DataAccess.Migrations
                 name: "SubscriptionPlan");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "E_Wallet");
 
             migrationBuilder.DropTable(
-                name: "E_Wallet");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Voucher");

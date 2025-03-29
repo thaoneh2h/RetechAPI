@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retech.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Retech.Core.Models
         public Guid ProductVerificationId { get; set; }
         public Guid ProductId { get; set; }
         public Guid UserId { get; set; }
-        public string VerificationStatus { get; set; } //enum: completed, Rejected
+        public VerificationStatus VerificationStatus { get; set; } //enum: completed, Rejected
         public float VerificationResult { get; set; }
         public decimal SuggestPrice { get; set; }
         public DateTime CreateAt { get; set; }

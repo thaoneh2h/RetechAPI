@@ -21,14 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasColumnType("decimal(18, 2)");  // Ensuring precision for amount
 
-            builder.Property(p => p.PaymentMethod)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store as string in database (enum to string conversion)
-
-
-            builder.Property(p => p.PaymentStatus)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store as string in database (enum to string conversion)
 
             builder.Property(p => p.TransactionDate)
                    .IsRequired();  // Transaction date must be provided

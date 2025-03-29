@@ -8,8 +8,8 @@ namespace Retech.Core.Models.Enums
 {
     public enum FormStatus
     {
-        Pending, 
-        Verified, 
-        Rejected
+        Pending=1, 
+        Verified=2, 
+        Rejected=3
     }
 }

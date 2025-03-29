@@ -17,9 +17,7 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.HasKey(dv => dv.VerificationSubmitId);
 
             // Properties
-            builder.Property(dv => dv.FormStatus)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store enum as string in the database
+
             builder.Property(dv => dv.Location)
                    .IsRequired()
                    .HasMaxLength(255);

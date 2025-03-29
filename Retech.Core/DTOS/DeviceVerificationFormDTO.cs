@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Retech.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Retech.Core.DTOS
@@ -13,6 +15,10 @@ namespace Retech.Core.DTOS
         public Guid UserId { get; set; }
         public DateTime VerificationDate { get; set; }
         public string Location { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public FormStatus FormStatus { get; set; }
+
+
     }
 
 }

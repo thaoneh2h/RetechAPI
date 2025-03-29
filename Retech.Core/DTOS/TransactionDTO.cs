@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Retech.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Retech.Core.DTOS
@@ -15,8 +17,10 @@ namespace Retech.Core.DTOS
         public Guid? ExchangeRequestId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
-        public string TransactionType { get; set; } // Buy, Sell, Exchange
-        public string TransactionStatus { get; set; } // Pending, Processing, Completed, Canceled
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public TransactionType TransactionType { get; set; } // Buy, Sell, Exchange
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public TransactionStatus TransactionStatus { get; set; } // Pending, Completed, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

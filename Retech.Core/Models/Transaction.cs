@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retech.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace Retech.Core.Models
         public Guid? ExchangeRequestId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
-        public string TransactionType { get; set; } // Buy, Sell, Exchange
-        public string TransactionStatus { get; set; } // Pending, Completed, Canceled
+        public TransactionType TransactionType { get; set; } // Buy, Sell, Exchange
+        public TransactionStatus TransactionStatus { get; set; } // Pending, Completed, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships

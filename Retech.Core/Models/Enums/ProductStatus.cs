@@ -8,7 +8,7 @@ namespace Retech.Core.Models.Enums
 {
     public enum ProductStatus
     {
-        Verified, 
-        NotVerified
+        Verified=1, 
+        NotVerified=2
     }
 }

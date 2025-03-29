@@ -9,6 +9,9 @@ using Retech.Core;
 using Retech.Core.Services;
 using Retech.Application.Services.Interfaces;
 using Retech.DataAccess.Repositories.Interfaces;
+using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,9 +67,18 @@ builder.Services.AddScoped<IProductVerificationService, ProductVerificationServi
 
 
 
-builder.Services.AddControllers(); // Thêm các controller
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });// Thêm các controller
 builder.Services.AddEndpointsApiExplorer(); // Cấu hình Swagger
-builder.Services.AddSwaggerGen(); // Swagger UI
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Retech API", Version = "v1" });
+    c.UseInlineDefinitionsForEnums(); // 👈 Phần quan trọng giúp enum hiển thị dưới dạng string
+});
+// Swagger UI
 
 var app = builder.Build();
 

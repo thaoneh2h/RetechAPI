@@ -9,9 +9,9 @@ namespace Retech.Core.Models.Enums
 
     public enum OrderStatus
     {
-        Pending, 
-        Approved, 
-        Delivered, 
-        Canceled
+        Pending=1, 
+        Approved=2, 
+        Completed=3, 
+        Canceled=4
     }
 }

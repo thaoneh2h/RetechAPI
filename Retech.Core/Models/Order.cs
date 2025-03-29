@@ -15,7 +15,7 @@ namespace Retech.Core.Models
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        public string OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
+        public OrderStatus OrderStatus { get; set; } //enum : Pending, Approved, Delivered, Canceled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
 

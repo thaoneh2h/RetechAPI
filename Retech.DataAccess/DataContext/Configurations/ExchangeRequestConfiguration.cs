@@ -21,9 +21,7 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(er => er.CreatedDate)
                    .HasDefaultValueSql("GETUTCDATE()");  // Default value for CreatedDate (UTC now)
 
-            builder.Property(er => er.ExchangeStatus)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store enum as string in the database
+
 
             // Relationships
             builder.HasOne(er => er.UserOffer)

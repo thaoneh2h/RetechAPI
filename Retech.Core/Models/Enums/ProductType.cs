@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retech.Core.Models.Enums
 {
-    public enum TransactionType
-    {
 
-        Sell=1,
-        Exchange=2
+    public enum ProductType
+    {
+        Selling=1, 
+        Exchanging=2
     }
 }

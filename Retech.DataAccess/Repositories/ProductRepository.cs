@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Retech.Core.Models;
+using Retech.Core.Models.Enums;
 using Retech.DataAccess.DataContext;
 using Retech.DataAccess.Repositories.Interfaces;
 using System;
@@ -68,9 +69,9 @@ namespace Retech.DataAccess.Repositories
                 productsQuery = productsQuery.Where(p => p.SellingPrice <= maxPrice.Value);
             }
 
-            if (!string.IsNullOrEmpty(condition))
+            if (!string.IsNullOrEmpty(condition) && Enum.TryParse<Condition>(condition, true, out var parsedCondition))
             {
-                productsQuery = productsQuery.Where(p => p.Condition == condition);
+                productsQuery = productsQuery.Where(p => p.Condition == parsedCondition);
             }
 
             if (!string.IsNullOrEmpty(brand))

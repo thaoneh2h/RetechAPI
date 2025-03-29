@@ -2,6 +2,7 @@
 using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
+using Retech.Core.Models.Enums;
 using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Retech.Application.Services
             // Map the DTO to the entity model (DeviceVerificationForm)
             var deviceVerificationForm = _mapper.Map<DeviceVerificationForm>(verificationRequest);
 
-            deviceVerificationForm.FormStatus = "Pending";  // Set default value for FormStatus
+            deviceVerificationForm.FormStatus = FormStatus.Pending;  // Set default value for FormStatus
 
             // Save the new verification request to the database
             await _deviceVerificationFormRepository.AddAsync(deviceVerificationForm);
@@ -62,7 +63,7 @@ namespace Retech.Application.Services
             {
                 ProductId = productId,
                 UserId = verificationResult.UserId,
-                VerificationStatus = "Completed",  // Mark as completed
+                VerificationStatus = VerificationStatus.Completed,  // Mark as completed
                 VerificationResult = verificationResult.VerificationResult,  // Store verification result
                 SuggestPrice = verificationResult.SuggestPrice,  // Suggested price to update selling price
                 CreateAt = DateTime.UtcNow
@@ -72,7 +73,7 @@ namespace Retech.Application.Services
             await _productVerificationRepository.AddAsync(verification);
 
             // Update the product status and price
-            product.ProductStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "NotVerified";
+            product.ProductStatus = verificationResult.VerificationStatus == VerificationStatus.Completed ? ProductStatus.Verified : ProductStatus.NotVerified;
             product.SellingPrice = verificationResult.SuggestPrice;  // Update selling price with suggested price
             product.Evaluate = verificationResult.VerificationResult;
 
@@ -80,7 +81,7 @@ namespace Retech.Application.Services
             await _productRepository.UpdateAsync(product);
 
             // Update the device verification form's status
-            deviceVerificationForm.FormStatus = verificationResult.VerificationStatus == "Completed" ? "Verified" : "Rejected";
+            deviceVerificationForm.FormStatus = verificationResult.VerificationStatus == VerificationStatus.Completed ? FormStatus.Verified : FormStatus.Rejected;
 
             // Save changes to the device verification form
             await _deviceVerificationFormRepository.UpdateAsync(deviceVerificationForm);

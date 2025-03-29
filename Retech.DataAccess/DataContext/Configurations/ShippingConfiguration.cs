@@ -26,9 +26,6 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(s => s.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()");  // Set default UTC date for creation
 
-            // Enum configuration for ShippingStatus
-            builder.Property(s => s.ShippingStatus)
-                   .HasConversion<string>();  // Store enum as string in the database
 
             // Relationships
             builder.HasOne(s => s.Order)
