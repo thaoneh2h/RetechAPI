@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 // Thêm AutoMapper vào DI container
 builder.Services.AddAutoMapper(typeof(MappingProfile)); // Cấu hình AutoMapper sử dụng profile MappingProfile
 // **Cấu hình JWT từ appsettings.json**
@@ -62,7 +63,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductVerificationRepository, ProductVerificationRepository>();
 builder.Services.AddScoped<IDeviceVerificationFormRepository, DeviceVerificationFormRepository>();
 builder.Services.AddScoped<IProductVerificationService, ProductVerificationService>();
-
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 
