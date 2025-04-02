@@ -25,12 +25,12 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .IsRequired();
 
             builder.Property(r => r.TransactionType)
-                .IsRequired()
-                .HasMaxLength(20);
+                .IsRequired();
+
 
             builder.Property(r => r.TransactionStatus)
-                .IsRequired()
-                .HasMaxLength(20);
+                .IsRequired();
+                
 
             builder.Property(r => r.CreatedAt)
                 .HasDefaultValueSql("GETDATE()")

@@ -35,9 +35,10 @@ namespace Retech.Application.Services
             }
 
             var order = _mapper.Map<Order>(orderDto);
+            order.UnitPrice = product.SellingPrice;
 
             // Calculate TotalPrice from Quantity and UnitPrice
-            order.TotalPrice = orderDto.Quantity * orderDto.UnitPrice;
+            order.TotalPrice = order.Quantity * order.UnitPrice;
 
             order.OrderStatus = OrderStatus.Pending;  // Initially, when buyer proposes an order
             await _orderRepository.AddAsync(order);
@@ -50,16 +51,16 @@ namespace Retech.Application.Services
             if (order == null)
                 throw new Exception("Order not found");
 
+            if (order.OrderStatus != OrderStatus.Pending)
+                throw new InvalidOperationException("Only orders with 'Pending' status can be approved.");
+
             var product = await _productRepository.GetByIdAsync(order.ProductId);
             if (product == null || product.ProductType != ProductType.Selling)
-            {
-                throw new InvalidOperationException("You can only approve orders for products with 'Selling' status.");
-            }
+                throw new InvalidOperationException("Only products with 'Selling' status can be ordered.");
 
-            // Calculate TotalPrice from Quantity and UnitPrice (if not calculated before)
             order.TotalPrice = order.Quantity * order.UnitPrice;
-
             order.OrderStatus = OrderStatus.Approved;
+
             await _orderRepository.UpdateAsync(order);
         }
 
@@ -70,16 +71,16 @@ namespace Retech.Application.Services
             if (order == null)
                 throw new Exception("Order not found");
 
+            if (order.OrderStatus != OrderStatus.Pending && order.OrderStatus != OrderStatus.Approved)
+                throw new InvalidOperationException("Only orders with 'Approved' and 'Pending' status can be canceled.");
+
             var product = await _productRepository.GetByIdAsync(order.ProductId);
             if (product == null || product.ProductType != ProductType.Selling)
-            {
-                throw new InvalidOperationException("You can only cancel orders for products with 'Selling' status.");
-            }
+                throw new InvalidOperationException("Only products with 'Selling' status can be ordered.");
 
-            // Calculate TotalPrice from Quantity and UnitPrice
             order.TotalPrice = order.Quantity * order.UnitPrice;
-
             order.OrderStatus = OrderStatus.Canceled;
+
             await _orderRepository.UpdateAsync(order);
         }
 
@@ -90,16 +91,16 @@ namespace Retech.Application.Services
             if (order == null)
                 throw new Exception("Order not found");
 
+            if (order.OrderStatus != OrderStatus.Approved)
+                throw new InvalidOperationException("Only orders with 'Approved' status can be completed.");
+
             var product = await _productRepository.GetByIdAsync(order.ProductId);
             if (product == null || product.ProductType != ProductType.Selling)
-            {
-                throw new InvalidOperationException("You can only complete orders for products with 'Selling' status.");
-            }
+                throw new InvalidOperationException("Only products with 'Selling' status can be ordered.");
 
-            // Calculate TotalPrice from Quantity and UnitPrice
             order.TotalPrice = order.Quantity * order.UnitPrice;
-
             order.OrderStatus = OrderStatus.Completed;
+
             await _orderRepository.UpdateAsync(order);
         }
 

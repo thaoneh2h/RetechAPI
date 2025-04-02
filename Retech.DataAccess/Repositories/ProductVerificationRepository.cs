@@ -29,6 +29,10 @@ namespace Retech.DataAccess.Repositories
             return await _context.ProductVerification
                                  .FirstOrDefaultAsync(pv => pv.ProductId == productId);
         }
+        public async Task<IEnumerable<ProductVerification>> GetAllAsync()
+        {
+            return await _context.ProductVerification.ToListAsync();
+        }
     }
 
     

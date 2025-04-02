@@ -11,6 +11,7 @@ using Retech.Application.Services.Interfaces;
 using Retech.DataAccess.Repositories.Interfaces;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using Retech.Service;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductVerificationRepository, ProductVerificationRepository>();
 builder.Services.AddScoped<IDeviceVerificationFormRepository, DeviceVerificationFormRepository>();
 builder.Services.AddScoped<IProductVerificationService, ProductVerificationService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>(); 
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ITradeUnitService, TradeUnitService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

@@ -12,10 +12,15 @@ namespace Retech.Core.Models
     {
         [Key]
         public Guid ProductVerificationId { get; set; }
+        [Required]
         public Guid ProductId { get; set; }
+        [Required]
         public Guid UserId { get; set; }
+        [EnumDataType(typeof(VerificationStatus))]
         public VerificationStatus VerificationStatus { get; set; } //enum: completed, Rejected
+        [Range(0, 5)]
         public float VerificationResult { get; set; }
+        [Range(0, double.MaxValue)]
         public decimal SuggestPrice { get; set; }
         public DateTime CreateAt { get; set; }
         //relationships

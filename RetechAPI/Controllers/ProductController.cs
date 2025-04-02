@@ -30,16 +30,16 @@ namespace Retech.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductDTO productDto)
+        public async Task<ActionResult<RequestProductDTO>> CreateProduct([FromBody] RequestProductDTO requestproductDto)
         {
-            var product = await _productService.CreateProductAsync(productDto);
+            var product = await _productService.CreateProductAsync(requestproductDto);
             return CreatedAtAction(nameof(GetProductById), new { id = product.ProductId }, product);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] ProductDTO productDto)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] RequestProductDTO requestproductDto)
         {
-            var product = await _productService.UpdateProductAsync(id, productDto);
+            var product = await _productService.UpdateProductAsync(id, requestproductDto);
             if (product == null)
             {
                 return NotFound();

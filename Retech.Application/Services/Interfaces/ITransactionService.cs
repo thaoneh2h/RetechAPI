@@ -16,7 +16,6 @@ namespace Retech.Application.Services.Interfaces
         Task CreateTransactionAsync(TransactionDTO transactionDto);
         Task UpdateTransactionAsync(Guid transactionId, TransactionDTO transactionDto);
         Task DeleteTransactionAsync(Guid transactionId);
-        Task ConfirmTransactionAsync(Guid transactionId);  // Xác nhận giao dịch
         Task CompleteTransactionAsync(Guid transactionId);  // Hoàn tất giao dịch
         Task CancelTransactionAsync(Guid transactionId);    // Hủy giao dịch
         Task<IEnumerable<TransactionDTO>> GetTransactionsByUserIdAsync(Guid userId);  // Lấy giao dịch của người dùng

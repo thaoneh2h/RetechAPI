@@ -9,8 +9,8 @@ namespace Retech.Application.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<ProductDTO> CreateProductAsync(ProductDTO productDto);
-        Task<ProductDTO> UpdateProductAsync(Guid productId, ProductDTO productDto);
+        Task<RequestProductDTO> CreateProductAsync(RequestProductDTO requestproductDto);
+        Task<RequestProductDTO> UpdateProductAsync(Guid productId, RequestProductDTO requestproductDto);
         Task<bool> DeleteProductAsync(Guid productId);
         Task<ProductDTO> GetProductByIdAsync(Guid productId);
         Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(string category);

@@ -36,7 +36,7 @@ namespace Retech.Core.Services
         public async Task CreateTransactionAsync(TransactionDTO transactionDto)
         {
             var transaction = _mapper.Map<Transaction>(transactionDto); // Ánh xạ từ TransactionDTO sang Transaction
-            transaction.TransactionStatus = TransactionStatus.Pending;
+            transaction.TransactionStatus = TransactionStatus.Processing;
             await _transactionRepository.AddAsync(transaction);
         }
 
@@ -51,15 +51,6 @@ namespace Retech.Core.Services
         public async Task DeleteTransactionAsync(Guid transactionId)
         {
             await _transactionRepository.DeleteAsync(transactionId);
-        }
-        public async Task ConfirmTransactionAsync(Guid transactionId)
-        {
-            var transaction = await _transactionRepository.GetByIdAsync(transactionId);
-            if (transaction != null && transaction.TransactionStatus == TransactionStatus.Pending)
-            {
-                transaction.TransactionStatus = TransactionStatus.Processing;  // Cập nhật trạng thái giao dịch
-                await _transactionRepository.UpdateAsync(transaction);
-            }
         }
 
         public async Task CompleteTransactionAsync(Guid transactionId)

@@ -10,5 +10,7 @@ namespace Retech.Application.Services.Interfaces
         Task<DeviceVerificationFormDTO> ScheduleVerificationAsync(DeviceVerificationFormDTO verificationRequest);
         Task CompleteVerificationAsync(Guid productId, ProductVerificationDTO verificationResult);
         Task<ProductVerificationDTO> GetVerificationResultAsync(Guid productId);
+        Task<IEnumerable<DeviceVerificationFormDTO>> GetAllDeviceVerificationFormAsync();
+        Task<IEnumerable<ProductVerificationDTO>> GetAllProductVerificationAsync();
     }
 }

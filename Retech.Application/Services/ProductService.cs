@@ -30,21 +30,21 @@ namespace Retech.Application.Services
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public async Task<ProductDTO> CreateProductAsync(ProductDTO productDto)
+        public async Task<RequestProductDTO> CreateProductAsync(RequestProductDTO requestproductDto)
         {
-            var product = _mapper.Map<Product>(productDto);
+            var product = _mapper.Map<Product>(requestproductDto);
             await _productRepository.AddAsync(product);
-            return _mapper.Map<ProductDTO>(product);
+            return _mapper.Map<RequestProductDTO>(product);
         }
 
-        public async Task<ProductDTO> UpdateProductAsync(Guid productId, ProductDTO productDto)
+        public async Task<RequestProductDTO> UpdateProductAsync(Guid productId, RequestProductDTO requestproductDto)
         {
             var product = await _productRepository.GetByIdAsync(productId);
             if (product == null) return null;
 
-            _mapper.Map(productDto, product);
+            _mapper.Map(requestproductDto, product);
             await _productRepository.UpdateAsync(product);
-            return _mapper.Map<ProductDTO>(product);
+            return _mapper.Map<RequestProductDTO>(product);
         }
 
         public async Task<bool> DeleteProductAsync(Guid productId)
