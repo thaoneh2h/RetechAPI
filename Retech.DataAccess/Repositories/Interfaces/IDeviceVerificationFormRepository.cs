@@ -12,6 +12,6 @@ namespace Retech.DataAccess.Repositories.Interfaces
         Task AddAsync(DeviceVerificationForm deviceVerificationForm);
         Task<DeviceVerificationForm> GetByProductIdAsync(Guid productId);
         Task UpdateAsync(DeviceVerificationForm deviceVerificationForm);
-        
-        }
+        Task<IEnumerable<DeviceVerificationForm>> GetAllAsync();
+    }
 }

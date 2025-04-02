@@ -9,6 +9,7 @@ namespace Retech.DataAccess.Repositories.Interfaces
     {
         Task AddAsync(ProductVerification productVerification);
         Task<ProductVerification> GetByProductIdAsync(Guid productId);
+        Task<IEnumerable<ProductVerification>> GetAllAsync();
     }
 
 

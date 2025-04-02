@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Retech.Core.DTOS
 {
-    public class ProductDTO
+    public class RequestProductDTO
     {
         public Guid ProductId { get; set; }
         [Required]  // Đảm bảo UserId không thể trống
@@ -30,7 +30,7 @@ namespace Retech.Core.DTOS
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [EnumDataType(typeof(ProductType))]  // Enum: Selling, Exchanging
         public ProductType ProductType { get; set; } //Enum: Selling, Exchanging
-        
+
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [EnumDataType(typeof(Condition))]  // Enum: New, Like New, Used
         public Condition Condition { get; set; } // Enum: New, Like New, Used
@@ -41,7 +41,5 @@ namespace Retech.Core.DTOS
         public int Stock { get; set; }
         [Required]
         public Guid CategoryId { get; set; }
-        [StringLength(100)]
-        public string BrandName { get; set; }
     }
 }

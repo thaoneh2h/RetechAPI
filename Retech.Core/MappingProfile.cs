@@ -25,8 +25,12 @@ namespace Retech.Core
             // Ánh xạ từ TransactionDTO -> Transaction
             CreateMap<TransactionDTO, Transaction>();
 
-            CreateMap<Product, ProductDTO>();
+            CreateMap<Product, ProductDTO>()
+            .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Category.BrandName));  
+
             CreateMap<ProductDTO, Product>();
+            CreateMap<Product, RequestProductDTO>();
+            CreateMap<RequestProductDTO, Product>();
 
 
 
@@ -34,7 +38,7 @@ namespace Retech.Core
             CreateMap<ProductVerificationDTO, ProductVerification>();
             CreateMap<DeviceVerificationForm, DeviceVerificationFormDTO>();
             CreateMap<DeviceVerificationFormDTO, DeviceVerificationForm>();
-
+            CreateMap<Category, CategoryDTO>().ReverseMap();
 
         }
     }

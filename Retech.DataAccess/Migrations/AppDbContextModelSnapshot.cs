@@ -52,7 +52,7 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bank");
+                    b.ToTable("Bank", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Category", b =>
@@ -519,7 +519,7 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasIndex("ReviewerId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Review", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.Shipping", b =>
@@ -566,7 +566,7 @@ namespace Retech.DataAccess.Migrations
 
                     b.HasIndex("UserAddressId");
 
-                    b.ToTable("Shipping");
+                    b.ToTable("Shipping", (string)null);
                 });
 
             modelBuilder.Entity("Retech.Core.Models.ShoppingCart", b =>

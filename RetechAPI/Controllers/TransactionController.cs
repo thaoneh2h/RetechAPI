@@ -74,13 +74,6 @@ namespace Retech.API.Controllers
             await _transactionService.DeleteTransactionAsync(transactionId);
             return NoContent();
         }
-        // Confirm Transaction (Người bán xác nhận)
-        [HttpPut("confirm/{transactionId}")]
-        public async Task<ActionResult> ConfirmTransaction(Guid transactionId)
-        {
-            await _transactionService.ConfirmTransactionAsync(transactionId);
-            return NoContent();
-        }
 
         // Complete Transaction (Hoàn tất giao dịch)
         [HttpPut("complete/{transactionId}")]

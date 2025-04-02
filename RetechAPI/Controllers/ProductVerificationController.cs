@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
+using Retech.Service;
 
 namespace Retech.API.Controllers
 {
@@ -56,6 +57,18 @@ namespace Retech.API.Controllers
 
             // Return the verification result
             return Ok(result);
+        }
+        [HttpGet("DeviceVerificationForm")]
+        public async Task<ActionResult<IEnumerable<DeviceVerificationFormDTO>>> GetAllDeviceVerificationForm()
+        {
+            var deviceVerificationForm = await _productVerificationService.GetAllDeviceVerificationFormAsync();
+            return Ok(deviceVerificationForm);
+        }
+        [HttpGet("ProductVerification")]
+        public async Task<ActionResult<IEnumerable<ProductVerificationDTO>>> GetAllProductVerification()
+        {
+            var verification = await _productVerificationService.GetAllProductVerificationAsync();
+            return Ok(verification);
         }
     }
 

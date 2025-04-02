@@ -3,6 +3,7 @@ using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
 using Retech.Core.Models.Enums;
+using Retech.DataAccess.Repositories;
 using Retech.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -92,6 +93,16 @@ namespace Retech.Application.Services
         {
             var verification = await _productVerificationRepository.GetByProductIdAsync(productId);
             return _mapper.Map<ProductVerificationDTO>(verification);
+        }
+        public async Task<IEnumerable<DeviceVerificationFormDTO>> GetAllDeviceVerificationFormAsync()
+        {
+            var deviceVerificationForm = await _deviceVerificationFormRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<DeviceVerificationFormDTO>>(deviceVerificationForm);
+        }
+        public async Task<IEnumerable<ProductVerificationDTO>> GetAllProductVerificationAsync()
+        {
+            var verification = await _productVerificationRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<ProductVerificationDTO>>(verification);
         }
     }
 

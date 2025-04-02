@@ -35,6 +35,9 @@ namespace Retech.DataAccess.Repositories
             _context.DeviceVerificationForm.Update(deviceVerificationForm);
             await _context.SaveChangesAsync();
         }
-
+        public async Task<IEnumerable<DeviceVerificationForm>> GetAllAsync()
+        {
+            return await _context.DeviceVerificationForm.ToListAsync();
+        }
     }
 }
