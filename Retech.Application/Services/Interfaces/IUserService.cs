@@ -18,7 +18,7 @@ namespace Retech.Application.Services
         Task<UserResponse> GetDetails(Guid userId);
         Task SendPhoneVerificationCode(SendCodeRequest request, Guid userId);
         Task VerifyPhoneNumber(VerifyPhoneNumberRequest request, Guid userId);
-        Task RefreshToken();
+        //Task RefreshToken();
         Task Logout();
         Task LoginWithFacebookAsync(string accessToken);
         Task LoginGoogle(IEnumerable<Claim> claims);

@@ -117,10 +117,7 @@ public class UserService(
 
     public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
     {
-        var user = (await unitOfWork.UserRepository.FindAllAsyncAsQueryable(u => u.UserName == loginUserModel.Email))
-        .Include(u => u.UserRoles)!
-            .ThenInclude(ur => ur.Role)
-            .FirstOrDefault();
+        var user = await userManager.FindByEmailAsync(loginUserModel.Email);
 
         if (user == null)
             throw new NotFoundException("Username or password is incorrect");
@@ -130,10 +127,12 @@ public class UserService(
         if (!signInResult.Succeeded)
             throw new BadRequestException("Username or password is incorrect");
 
+        // Lấy danh sách vai trò của user
+        var roles = await userManager.GetRolesAsync(user);
+
+        // Sinh access token
         var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
         var refreshToken = JwtHelper.GenerateRefreshToken();
-
-        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
 
         return new LoginResponseModel()
         {
@@ -142,6 +141,7 @@ public class UserService(
             User = unitOfWork.Mapper.Map<UserResponse>(user)
         };
     }
+
 
     public async Task LoginCookiesAsync(LoginUserModel loginUserModel)
     {
@@ -157,8 +157,6 @@ public class UserService(
 
         var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
         var refreshToken = JwtHelper.GenerateRefreshToken();
-
-        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
 
         SetAuthTokensCookie(token, refreshToken);
     }
@@ -236,28 +234,10 @@ public class UserService(
         await userManager.UpdateAsync(user);
     }
 
-    public async Task RefreshToken()
-    {
-        var refreshToken = httpContextAccessor.HttpContext?.Request.Cookies[TokenConstants.REFRESH_TOKEN];
-        if (string.IsNullOrEmpty(refreshToken)) throw new UnauthorizedException("Refresh token is missing");
-
-        var validatedToken = await unitOfWork.RefreshTokenRepository.ValidateRefreshTokenAsync(refreshToken)
-                             ?? throw new UnauthorizedException("Invalid refresh token");
-
-        var newAccessToken = await JwtHelper.GenerateToken(validatedToken, jwtSettings, userManager);
-        var newRefreshToken = JwtHelper.GenerateRefreshToken();
-
-        await unitOfWork.RefreshTokenRepository.UpdateRefreshTokenAsync(validatedToken.Id, newRefreshToken,
-            jwtSettings);
-
-        SetAuthTokensCookie(newAccessToken, newRefreshToken);
-    }
-
     public async Task Logout()
     {
         var refreshToken = httpContextAccessor.HttpContext?.Request.Cookies[TokenConstants.REFRESH_TOKEN];
         if (!string.IsNullOrEmpty(refreshToken))
-            await unitOfWork.RefreshTokenRepository.InvalidateRefreshToken(refreshToken);
         httpContextAccessor.HttpContext?.Response.Cookies.Delete(TokenConstants.ACCESS_TOKEN);
         httpContextAccessor.HttpContext?.Response.Cookies.Delete(TokenConstants.REFRESH_TOKEN);
     }
@@ -325,7 +305,7 @@ public class UserService(
         var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
         var refreshToken = JwtHelper.GenerateRefreshToken();
 
-        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+        //await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
 
         SetAuthTokensCookie(token, refreshToken);
     }
@@ -342,7 +322,7 @@ public class UserService(
             if (user == null) throw new UnauthorizedAccessException("Not found user");
             var accessToken = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
             var refreshToken = JwtHelper.GenerateRefreshToken();
-            await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+            //await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
             SetAuthTokensCookie(accessToken, refreshToken);
         }
         else
