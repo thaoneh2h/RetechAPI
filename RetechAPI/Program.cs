@@ -12,6 +12,7 @@ using Retech.DataAccess.Repositories.Interfaces;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Retech.Service;
+using Footprint.Application.Services.Implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
