@@ -1,112 +1,454 @@
-﻿//using AutoMapper;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Identity;
-//using Retech.Application.Common.Email;
-//using Retech.Core.DTOS;
-//using Retech.Core.Identify;
-//using Retech.Core.Models;
-//using Retech.Core.Settings;
-//using Retech.DataAccess.Repositories;
-//using StackExchange.Redis;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Threading.Tasks;
+﻿using Retech.Application.Common.Email;
+using Retech.Application.Helpers;
+using Retech.Application.Models.RequestModels.Users;
+using Retech.Application.Models.ResponeModels.Users;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Net;
+using System.Security.Claims;
+using System.Text;
+using Retech.Core.Attributes;
+using AutoMapper;
+using Retech.Application.Services;
+using Retech.Core.Identify;
+using Retech.Core.Settings;
+using Retech.Application.Exceptions;
+using System.Data;
+using Retech.Core.Constants;
+using Retech.Core.Models;
+using Retech.Application.Templates;
+using Microsoft.EntityFrameworkCore;
+using Footprint.Application.Exceptions;
+using Retech.Application.Models;
 
-//namespace Retech.Application.Services;
+namespace Footprint.Application.Services.Implementations;
 
-//public class UserService(
-//    IMapper mapper,
-//    UserManager<ApplicationUser> userManager,
-//    SignInManager<ApplicationUser> signInManager,
-//    ITemplateService templateService,
-//    IEmailService emailService,
-//    RoleManager<Role> roleManager,
-//    SmtpSettings smtpSettings,
-//    IHttpContextAccessor httpContextAccessor,
-//    JwtSettings jwtSettings,
-//    IUnitOfWork unitOfWork,
-//    ISMSService smsService,
-//    IFacebookAuthService facebookAuthService)
-//    : IUserService
-//{
-//    private readonly IUserRepository _userRepository;
+[ScopedService]
+public class UserService(
+    IMapper mapper,
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+    ITemplateService templateService,
+    IEmailService emailService,
+    SmtpSettings smtpSettings,
+    IHttpContextAccessor httpContextAccessor,
+    JwtSettings jwtSettings,
+    IUnitOfWork unitOfWork,
+    ISMSService smsService,
+    IFacebookAuthService facebookAuthService)
+    : IUserService
+{
+    public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
+    {
+        var user = mapper.Map<ApplicationUser>(createUserModel);
+        user.UserRole = UserRoleConstants.SELLER;
+        try
+        {
+            var result = await userManager.CreateAsync(user, createUserModel.Password);
 
-//    public UserService(IUserRepository userRepository)
-//    {
-//        _userRepository = userRepository;
-//    }
+            if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()!.Description);
 
-//    // Phương thức lấy thông tin hồ sơ người dùng
-//    public async Task<UserProfileDTO> GetUserProfileAsync(Guid userId)
-//    {
-//        var user = await _userRepository.GetByIdAsync(userId); // Sử dụng UserRepository để lấy dữ liệu
-//        if (user == null)
-//            throw new Exception("User not found.");
+            //if (!await roleManager.RoleExistsAsync(UserRoleConstants.SELLER))
+            //    await roleManager.CreateAsync(new Role { Name = UserRoleConstants.SELLER });
+            //var roleResult = await userManager.AddToRoleAsync(user, UserRoleConstants.SELLER);
+            //if (!roleResult.Succeeded)
+            //{
+            //    await userManager.DeleteAsync(user);
+            //    throw new UnprocessableRequestException("Can not create account with role SELLER");
+            //}
 
-//        return new UserProfileDTO
-//        {
-//            UserName = user.UserName,
-//            Email = user.Email,
-//            PhoneNumber = user.PhoneNumber,
-//            Address = user.Address,
-//            Gender = user.Gender,
-//            BirthDate = user.BirthDate,
-//            ProfilePicture = user.ProfilePicture // Cung cấp ảnh đại diện
-//        };
-//    }
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-//    // Phương thức cập nhật hồ sơ người dùng
-//    public async Task UpdateUserProfileAsync(Guid userId, UserProfileDTO userProfileDTO)
-//    {
-//        var user = await _userRepository.GetByIdAsync(userId);
-//        if (user == null)
-//            throw new Exception("User not found.");
+            var emailTemplate = await templateService.GetTemplateAsync(TemplateConstants.ConfirmationEmail);
+            var encodedToken = WebUtility.UrlEncode(token);
+            var emailBody = templateService.ReplaceInTemplate(emailTemplate,
+                new Dictionary<string, string>
+                {
+                    { "{Link}", $"{smtpSettings.EmailConfirmationCallbackUrl}?UserId={user.Id}&Token={encodedToken}" }
+                });
 
-//        user.UserName = userProfileDTO.UserName;
-//        user.Email = userProfileDTO.Email;
-//        user.PhoneNumber = userProfileDTO.PhoneNumber;
-//        user.Address = userProfileDTO.Address;
-//        user.Gender = userProfileDTO.Gender;
-//        user.BirthDate = userProfileDTO.BirthDate;
-//        user.ProfilePicture = userProfileDTO.ProfilePicture;
+#pragma warning disable 4014
+            emailService.SendEmailAsync(EmailMessage.Create(user.Email!, emailBody, "[Retech] Confirm your email"));
 
-//        await _userRepository.SaveAsync(user); // Lưu thay đổi vào cơ sở dữ liệu
-//    }
-
-
-//    public async Task<List<User>> GetUsersAsync()
-//    {
-//        return await _userRepository.GetAllUsersAsync();
-//    }
-
-//    public async Task<User> GetUserByNameAsync(string name)
-//    {
-//        return await _userRepository.GetUserByNameAsync(name);
-//    }
-
-//    public async Task<User> GetUserByEmailAsync(string email)
-//    {
-//        var user = await _userRepository.GetUserByEmailAsync(email);
-//        if (user == null)
-//            throw new Exception("User not found.");
-//        return user;
-//    }
-
-//    public async Task AddUserAsync(User user)
-//    {
-//        await _userRepository.AddUserAsync(user);
-//    }
-
-//    public async Task UpdateUserAsync(User user)
-//    {
-//        await _userRepository.UpdateUserAsync(user);
-//    }
-
-//    public async Task DeleteUserAsync(User user)
-//    {
-//        await _userRepository.DeleteUserAsync(user);
-//    }
+            return new CreateUserResponseModel
+            {
+                Id = (await userManager.FindByNameAsync(user.UserName!))!.Id
+            };
+        }
+        catch (Exception e)
+        {
+            var userToDelete = await userManager.FindByNameAsync(user.UserName!);
+            if (userToDelete != null)
+                await userManager.DeleteAsync(userToDelete);
+            throw new BadRequestException(e.Message);
+        }
+    }
 
 
-//}
+    public async Task CreateUserWithAutoGeneratedPassword(CreateUserWithNoPasswordRequest request, string role)
+    {
+        var user = mapper.Map<ApplicationUser>(request);
+        try
+        {
+            user.GeneratedPassword = GeneratePassword();
+            user.UserRole = role ?? UserRoleConstants.SELLER;
+
+            var result = await userManager.CreateAsync(user, user.GeneratedPassword);
+
+            if (!result.Succeeded)
+                throw new BadRequestException(result.Errors.FirstOrDefault()?.Description ?? "Error to create account!");
+
+            user = await userManager.FindByNameAsync(user.UserName!)
+                ?? throw new NotFoundException($"Can't find user with name : {user.UserName}");
+
+            user.EmailConfirmed = true;
+            await unitOfWork.CompleteAsync();
+        }
+        catch (Exception e)
+        {
+            var userToDelete = await userManager.FindByNameAsync(user?.UserName!);
+            if (userToDelete != null)
+                await userManager.DeleteAsync(userToDelete);
+
+            throw new BadRequestException(e.Message);
+        }
+    }
+
+
+    public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
+    {
+        var user = (await unitOfWork.UserRepository.FindAllAsyncAsQueryable(u => u.UserName == loginUserModel.Email))
+        .Include(u => u.UserRoles)!
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefault();
+
+        if (user == null)
+            throw new NotFoundException("Username or password is incorrect");
+
+        var signInResult = await signInManager.PasswordSignInAsync(user, loginUserModel.Password, false, false);
+
+        if (!signInResult.Succeeded)
+            throw new BadRequestException("Username or password is incorrect");
+
+        var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
+        var refreshToken = JwtHelper.GenerateRefreshToken();
+
+        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+
+        return new LoginResponseModel()
+        {
+            AccessToken = token,
+            RefreshToken = refreshToken,
+            User = unitOfWork.Mapper.Map<UserResponse>(user)
+        };
+    }
+
+    public async Task LoginCookiesAsync(LoginUserModel loginUserModel)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.UserName == loginUserModel.Email);
+
+        if (user == null)
+            throw new NotFoundException("Username or password is incorrect");
+
+        var signInResult = await signInManager.PasswordSignInAsync(user, loginUserModel.Password, false, false);
+
+        if (!signInResult.Succeeded)
+            throw new BadRequestException("Username or password is incorrect");
+
+        var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
+        var refreshToken = JwtHelper.GenerateRefreshToken();
+
+        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+
+        SetAuthTokensCookie(token, refreshToken);
+    }
+
+    public async Task<ConfirmEmailResponseModel> ConfirmEmailAsync(ConfirmEmailModel confirmEmailModel)
+    {
+        var user = await userManager.FindByIdAsync(confirmEmailModel.UserId);
+
+        if (user == null)
+            throw new UnprocessableRequestException("Your verification link is incorrect");
+
+        var result = await userManager.ConfirmEmailAsync(user, confirmEmailModel.Token);
+
+        if (!result.Succeeded)
+            throw new UnprocessableRequestException("Your verification link has expired");
+
+        return new ConfirmEmailResponseModel
+        {
+            Confirmed = true
+        };
+    }
+
+    public async Task<BaseResponseModel> ChangePasswordAsync(Guid userId, ChangePasswordModel changePasswordModel)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+            throw new NotFoundException("User does not exist anymore");
+
+        var result =
+            await userManager.ChangePasswordAsync(user, changePasswordModel.OldPassword,
+                changePasswordModel.NewPassword);
+
+        if (!result.Succeeded)
+            throw new BadRequestException(result.Errors.FirstOrDefault()!.Description);
+
+        return new BaseResponseModel
+        {
+            Id = user.Id
+        };
+    }
+
+    public async Task<UserResponse> GetDetails(Guid userId)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == userId)
+                   ?? throw new NotFoundException("User not found");
+        var response = mapper.Map<UserResponse>(user);
+        response.UserRole = await userManager.GetRolesAsync(user);
+        return response;
+    }
+
+    public async Task SendPhoneVerificationCode(SendCodeRequest request, Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString())
+                   ?? throw new NotFoundException($"Can't find user.");
+
+        var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, request.PhoneNumber);
+
+        var result = await smsService.SendSmsAsync(request.PhoneNumber, token);
+        if (!result)
+            throw new BadRequestException("Can't contact message user");
+    }
+
+    public async Task VerifyPhoneNumber(VerifyPhoneNumberRequest request, Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString())
+                   ?? throw new NotFoundException($"Can't find user.");
+
+        var result = await userManager.VerifyChangePhoneNumberTokenAsync(user, request.Token, request.PhoneNumber);
+        if (!result)
+            throw new BadRequestException("Session expired");
+
+        user.PhoneNumber = request.PhoneNumber;
+        user.PhoneNumberConfirmed = true;
+        await userManager.UpdateAsync(user);
+    }
+
+    public async Task RefreshToken()
+    {
+        var refreshToken = httpContextAccessor.HttpContext?.Request.Cookies[TokenConstants.REFRESH_TOKEN];
+        if (string.IsNullOrEmpty(refreshToken)) throw new UnauthorizedException("Refresh token is missing");
+
+        var validatedToken = await unitOfWork.RefreshTokenRepository.ValidateRefreshTokenAsync(refreshToken)
+                             ?? throw new UnauthorizedException("Invalid refresh token");
+
+        var newAccessToken = await JwtHelper.GenerateToken(validatedToken, jwtSettings, userManager);
+        var newRefreshToken = JwtHelper.GenerateRefreshToken();
+
+        await unitOfWork.RefreshTokenRepository.UpdateRefreshTokenAsync(validatedToken.Id, newRefreshToken,
+            jwtSettings);
+
+        SetAuthTokensCookie(newAccessToken, newRefreshToken);
+    }
+
+    public async Task Logout()
+    {
+        var refreshToken = httpContextAccessor.HttpContext?.Request.Cookies[TokenConstants.REFRESH_TOKEN];
+        if (!string.IsNullOrEmpty(refreshToken))
+            await unitOfWork.RefreshTokenRepository.InvalidateRefreshToken(refreshToken);
+        httpContextAccessor.HttpContext?.Response.Cookies.Delete(TokenConstants.ACCESS_TOKEN);
+        httpContextAccessor.HttpContext?.Response.Cookies.Delete(TokenConstants.REFRESH_TOKEN);
+    }
+
+    private void SetAuthTokensCookie(string accessToken, string refreshToken)
+    {
+        SetTokenCookie(TokenConstants.ACCESS_TOKEN, accessToken,
+            TimeSpan.FromMinutes(jwtSettings.AccessTokenLifetimeInMinutes));
+        SetTokenCookie(TokenConstants.REFRESH_TOKEN, refreshToken,
+            TimeSpan.FromDays(jwtSettings.RefreshTokenLifetimeInDays));
+    }
+
+    private void SetTokenCookie(string name, string token, TimeSpan expiresIn)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTime.UtcNow.Add(expiresIn),
+            Secure = true,
+            IsEssential = true,
+            SameSite = SameSiteMode.None,
+        };
+        httpContextAccessor.HttpContext?.Response.Cookies.Append(name, token, cookieOptions);
+    }
+
+
+    public async Task LoginWithFacebookAsync(string accessToken)
+    {
+        var validatedTokenResult = await facebookAuthService.ValidateAccessTokenAsync(accessToken);
+
+        if (validatedTokenResult.Data.IsValid)
+            throw new BadRequestException("Invalid Facebook token");
+
+        var userInfo = await facebookAuthService.GetUserInfoAsync(accessToken);
+
+        var user = await userManager.FindByEmailAsync(userInfo.Email);
+
+        if (user == null)
+        {
+            var appUser = new ApplicationUser()
+            {
+                UserName = $"{userInfo.FirstName} {userInfo.LastName}",
+                Email = userInfo.Email,
+                ProfilePicture = userInfo.Picture.Data?.Url?.ToString()
+            };
+
+            var result = await userManager.CreateAsync(appUser);
+
+            if (!result.Succeeded)
+                throw new BadRequestException(result.Errors.First().Description);
+
+            //if (!await roleManager.RoleExistsAsync(UserRoleConstants.CUSTOMER))
+            //    await roleManager.CreateAsync(new Role { Name = UserRoleConstants.CUSTOMER });
+            //var roleResult = await userManager.AddToRoleAsync(appUser, UserRoleConstants.CUSTOMER);
+
+            //if (!roleResult.Succeeded)
+            //{
+            //    await userManager.DeleteAsync(appUser);
+            //    throw new UnprocessableRequestException("Can not create account with role CUSTOMER");
+            //}
+            //exeption cho việc check role
+
+            user = appUser;
+        }
+        var token = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
+        var refreshToken = JwtHelper.GenerateRefreshToken();
+
+        await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+
+        SetAuthTokensCookie(token, refreshToken);
+    }
+
+
+
+    public async Task LoginGoogle(IEnumerable<Claim> claims)
+    {
+        if (claims != null && claims.Count() > 0)
+        {
+            var userInfo = GetAuth(claims);
+            if (userInfo == null!) throw new UnauthorizedAccessException("UserInfor invalid");
+            var user = await UserSigninCreate(userInfo);
+            if (user == null) throw new UnauthorizedAccessException("Not found user");
+            var accessToken = await JwtHelper.GenerateToken(user, jwtSettings, userManager);
+            var refreshToken = JwtHelper.GenerateRefreshToken();
+            await unitOfWork.RefreshTokenRepository.SaveRefreshToken(user.Id, refreshToken, jwtSettings);
+            SetAuthTokensCookie(accessToken, refreshToken);
+        }
+        else
+        {
+            throw new UnauthorizedAccessException("Google authentication failed");
+        }
+    }
+
+    public async Task<ApplicationUser> UserSigninCreate(UserGGInfo userinfo)
+    {
+        if (userinfo != null!)
+        {
+            ApplicationUser applicationUser = await unitOfWork.UserRepository.GetOneAsync(x => x.Email == userinfo.Email, forUpdate: true);
+            if (applicationUser == null!)
+            {
+                ApplicationUser createUserModel = new ApplicationUser
+                {
+                    Email = userinfo.Email,
+                    ProfilePicture = userinfo.Thumbnail,
+                    UserName = userinfo.Email.Substring(0, userinfo.Email.LastIndexOf("@")),
+                };
+
+                var result = await userManager.CreateAsync(createUserModel);
+
+                if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()!.Description);
+
+                if (!await roleManager.RoleExistsAsync(UserRoleConstants.CUSTOMER))
+                    await roleManager.CreateAsync(new Role { Name = UserRoleConstants.CUSTOMER });
+
+                var roleResult = await userManager.AddToRoleAsync(createUserModel, UserRoleConstants.CUSTOMER);
+                if (!roleResult.Succeeded)
+                {
+                    await userManager.DeleteAsync(createUserModel);
+                    throw new UnprocessableRequestException("Can not create account with role CUSTOMER");
+                }
+                applicationUser = await userManager.FindByEmailAsync(createUserModel.Email!);
+            }
+            else
+            {
+                applicationUser.FullName = userinfo.Name != applicationUser.FullName ? userinfo.Name : applicationUser.FullName;
+                await unitOfWork.UserRepository.UpdateAsync(applicationUser);
+                await unitOfWork.CompleteAsync();
+            }
+            return applicationUser!;
+        }
+        return null!;
+    }
+
+    private UserGGInfo GetAuth(IEnumerable<Claim> claims)
+    {
+        if (claims != null && claims.Count() > 0)
+        {
+            var email = claims.First(claim => claim.Type == ClaimTypes.Email).Value;
+            var name = claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            //var thumbnail = claims.First(claim => claim.Type =="picture").Value;
+            return new UserGGInfo(email, name, "");
+        }
+        return null!;
+    }
+
+    public record UserGGInfo(string Email, string Name, string Thumbnail);
+
+
+    private string GeneratePassword(int length = 6, bool requireDigit = true, bool requireLowercase = true,
+                                          bool requireUppercase = true, bool requireNonAlphanumeric = true,
+                                          int requiredUniqueChars = 1)
+    {
+        const string lowerChars = "abcdefghijklmnopqrstuvwxyz";
+        const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string digitChars = "0123456789";
+        const string nonAlphanumericChars = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
+
+        var random = new Random();
+        var password = new StringBuilder();
+
+        // Ensure password includes required character types
+        if (requireLowercase)
+            password.Append(lowerChars[random.Next(lowerChars.Length)]);
+        if (requireUppercase)
+            password.Append(upperChars[random.Next(upperChars.Length)]);
+        if (requireDigit)
+            password.Append(digitChars[random.Next(digitChars.Length)]);
+        if (requireNonAlphanumeric)
+            password.Append(nonAlphanumericChars[random.Next(nonAlphanumericChars.Length)]);
+
+        // Fill the remaining length with random characters
+        string allChars = (requireLowercase ? lowerChars : "") +
+                          (requireUppercase ? upperChars : "") +
+                          (requireDigit ? digitChars : "") +
+                          (requireNonAlphanumeric ? nonAlphanumericChars : "");
+
+        while (password.Length < length)
+        {
+            password.Append(allChars[random.Next(allChars.Length)]);
+        }
+
+        // Shuffle the password to avoid predictable patterns
+        var shuffledPassword = password.ToString().OrderBy(c => random.Next()).ToArray();
+
+        // Ensure required unique characters
+        if (shuffledPassword.Distinct().Count() < requiredUniqueChars)
+            return GeneratePassword(length, requireDigit, requireLowercase, requireUppercase, requireNonAlphanumeric, requiredUniqueChars);
+
+        return new string(shuffledPassword);
+    }
+}
+
+
+//CRUD Review, Address, 

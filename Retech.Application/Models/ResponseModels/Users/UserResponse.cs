@@ -9,6 +9,7 @@
         public string Gender { get; set; } = null;
         public string BirthDate { get; set; } = null;
         public string ProfilePicture { get; set; } = null;
+        public IList<string>? UserRole { get; set; }
 
     }
 }

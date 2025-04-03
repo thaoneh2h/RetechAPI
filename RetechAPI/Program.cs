@@ -67,9 +67,7 @@ builder.Services.AddScoped<IProductVerificationService, ProductVerificationServi
 builder.Services.AddScoped<ICategoryService, CategoryService>(); 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITradeUnitService, TradeUnitService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Retech.Core.Constants;
 using Retech.Core.Models.Enums;
 
 namespace Retech.Core.Identify;
@@ -6,8 +7,10 @@ namespace Retech.Core.Identify;
 public class ApplicationUser : IdentityUser<Guid>/*,ISoftDelete<Guid> cái này implement chưa hết...*/
 {
     public string UserName { get; set; } = null!;
+    public string UserRole { get; set; } = UserRoleConstants.SELLER;
     public string? ProfilePicture { get; set; }
     public Gender Gender { get; set; } = Gender.Other;
+    public string? GeneratedPassword { get; set; }
     public string? Password { get; set; }
     //public ICollection<TourRequest>? TourRequests { get; set; }
     //public ICollection<Proposal>? Proposals { get; set; }
