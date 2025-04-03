@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Retech.DataAccess.Repositories.Interfaces;
+
 
 namespace Retech.DataAccess
 {
-    interface IUnitOfWork
+    public interface IUnitOfWork
     {
+        IMapper Mapper { get; }
+        ICategoryRepository CategoryRepository { get; }
+        IDeviceVerificationFormRepository DeviceVerificationFormRepository { get; }
+        IOrderRepository OrderRepository { get; }
+        IProductRepository ProductRepository { get; }
+        IProductVerificationRepository ProductVerificationRepository { get; }
+        ITransactionRepository TransactionRepository { get; }
+        IUserRepository UserRepository { get; }
+        IVoucherRepository VoucherRepository { get; }
+        IWalletRepository WalletRepository { get; }
+        Task<bool> CompleteAsync(CancellationToken cancellationToken = default);
     }
 }

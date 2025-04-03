@@ -23,12 +23,5 @@ namespace Retech.Application.Services
         Task LoginWithFacebookAsync(string accessToken);
         Task LoginGoogle(IEnumerable<Claim> claims);
 
-        Task<List<User>> GetUsersAsync();
-        Task<User> GetUserByNameAsync(string name);
-        Task<User> GetUserByEmailAsync(string email);
-        Task AddUserAsync(User user);
-        Task UpdateUserAsync(User user);
-        Task DeleteUserAsync(User user);
-
     }
 }

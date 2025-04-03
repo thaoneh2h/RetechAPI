@@ -15,11 +15,11 @@ using Retech.Core.Settings;
 using Retech.Application.Exceptions;
 using System.Data;
 using Retech.Core.Constants;
-using Retech.Core.Models;
 using Retech.Application.Templates;
 using Microsoft.EntityFrameworkCore;
 using Footprint.Application.Exceptions;
 using Retech.Application.Models;
+using Retech.DataAccess;
 
 namespace Footprint.Application.Services.Implementations;
 
@@ -353,42 +353,42 @@ public class UserService(
 
     public async Task<ApplicationUser> UserSigninCreate(UserGGInfo userinfo)
     {
-        if (userinfo != null!)
+        if (userinfo != null)
         {
+            // Kiểm tra xem user đã tồn tại chưa
             ApplicationUser applicationUser = await unitOfWork.UserRepository.GetOneAsync(x => x.Email == userinfo.Email, forUpdate: true);
-            if (applicationUser == null!)
+
+            if (applicationUser == null)
             {
+                // Tạo user mới nếu chưa tồn tại
                 ApplicationUser createUserModel = new ApplicationUser
                 {
                     Email = userinfo.Email,
                     ProfilePicture = userinfo.Thumbnail,
                     UserName = userinfo.Email.Substring(0, userinfo.Email.LastIndexOf("@")),
+                    UserRole = UserRoleConstants.SELLER // Gán role trực tiếp
                 };
 
                 var result = await userManager.CreateAsync(createUserModel);
 
-                if (!result.Succeeded) throw new BadRequestException(result.Errors.FirstOrDefault()!.Description);
+                if (!result.Succeeded)
+                    throw new BadRequestException(result.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
 
-                if (!await roleManager.RoleExistsAsync(UserRoleConstants.CUSTOMER))
-                    await roleManager.CreateAsync(new Role { Name = UserRoleConstants.CUSTOMER });
-
-                var roleResult = await userManager.AddToRoleAsync(createUserModel, UserRoleConstants.CUSTOMER);
-                if (!roleResult.Succeeded)
-                {
-                    await userManager.DeleteAsync(createUserModel);
-                    throw new UnprocessableRequestException("Can not create account with role CUSTOMER");
-                }
-                applicationUser = await userManager.FindByEmailAsync(createUserModel.Email!);
+                applicationUser = await userManager.FindByEmailAsync(createUserModel.Email);
             }
             else
             {
-                applicationUser.FullName = userinfo.Name != applicationUser.FullName ? userinfo.Name : applicationUser.FullName;
-                await unitOfWork.UserRepository.UpdateAsync(applicationUser);
-                await unitOfWork.CompleteAsync();
+                // Cập nhật UserName nếu cần
+                if (userinfo.Name != applicationUser.UserName)
+                {
+                    applicationUser.UserName = userinfo.Name;
+                    await unitOfWork.UserRepository.UpdateAsync(applicationUser);
+                    await unitOfWork.CompleteAsync();
+                }
             }
-            return applicationUser!;
+            return applicationUser;
         }
-        return null!;
+        throw new BadRequestException("Invalid user information.");
     }
 
     private UserGGInfo GetAuth(IEnumerable<Claim> claims)
