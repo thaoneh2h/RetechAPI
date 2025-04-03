@@ -16,12 +16,14 @@ namespace Retech.Application.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IVoucherRepository _voucherRepository;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
+            _voucherRepository = voucherRepository;
             _mapper = mapper;
         }
 
@@ -30,17 +32,34 @@ namespace Retech.Application.Services
         {
             var product = await _productRepository.GetByIdAsync(orderDto.ProductId);
             if (product == null || product.ProductType != ProductType.Selling)
-            {
-                throw new InvalidOperationException("Product is not available for order. Only products with 'Selling' status can be ordered.");
-            }
+                throw new InvalidOperationException("Product is not available for order. Only 'Selling' products can be ordered.");
 
             var order = _mapper.Map<Order>(orderDto);
             order.UnitPrice = product.SellingPrice;
-
-            // Calculate TotalPrice from Quantity and UnitPrice
             order.TotalPrice = order.Quantity * order.UnitPrice;
+            // Kiểm tra voucher nếu có
+            if (orderDto.VoucherId.HasValue)
+            {
+                var voucher = await _voucherRepository.GetByIdAsync(orderDto.VoucherId.Value);
+                if (voucher == null)
+                    throw new InvalidOperationException("Voucher not found.");
 
-            order.OrderStatus = OrderStatus.Pending;  // Initially, when buyer proposes an order
+                if (voucher.ValidTo < DateTime.UtcNow)
+                    throw new InvalidOperationException("Voucher is expired.");
+
+                // Tính toán total price sau khi giảm giá voucher
+                decimal discountValue = voucher.DiscountValue;
+                if (order.TotalPrice < discountValue)
+                    order.TotalPrice = 0;  // Nếu DiscountValue lớn hơn TotalPrice, set TotalPrice = 0
+                else
+                    order.TotalPrice -= discountValue;
+
+                // Đặt trạng thái voucher là Expired sau khi sử dụng
+                voucher.VoucherStatus = VoucherStatus.Expired;
+                await _voucherRepository.UpdateAsync(voucher);
+            }
+
+            order.OrderStatus = OrderStatus.Pending;  // Đặt trạng thái đơn hàng là Pending
             await _orderRepository.AddAsync(order);
         }
 
