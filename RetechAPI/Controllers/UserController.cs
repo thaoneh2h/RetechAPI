@@ -61,12 +61,12 @@ public class UserController(IUserService userService, Authentication authenticat
             await userService.ChangePasswordAsync(UserId, changePasswordModel)));
     }
 
-    [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken()
-    {
-        await userService.RefreshToken();
-        return Ok(ApiResult.Success());
-    }
+    //[HttpPost("refresh-token")]
+    //public async Task<IActionResult> RefreshToken()
+    //{
+    //    await userService.RefreshToken();
+    //    return Ok(ApiResult.Success());
+    //}
 
     [HttpPost("logout")]
     [Authorize]
