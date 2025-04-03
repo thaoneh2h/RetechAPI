@@ -12,17 +12,20 @@ namespace Retech.Application.Services
         private readonly IOrderRepository _orderRepo;
         private readonly IProductRepository _productRepo;
         private readonly ITransactionRepository _transactionRepo;
+        private readonly IVoucherRepository _voucherRepo;
         private readonly IMapper _mapper;
 
         public TradeUnitService(
             IOrderRepository orderRepo,
             IProductRepository productRepo,
             ITransactionRepository transactionRepo,
+            IVoucherRepository voucherRepo,
             IMapper mapper)
         {
             _orderRepo = orderRepo;
             _productRepo = productRepo;
             _transactionRepo = transactionRepo;
+            _voucherRepo = voucherRepo;
             _mapper = mapper;
         }
 
@@ -35,8 +38,29 @@ namespace Retech.Application.Services
             var order = _mapper.Map<Order>(orderDto);
             order.UnitPrice = product.SellingPrice;
             order.TotalPrice = order.Quantity * order.UnitPrice;
-            order.OrderStatus = OrderStatus.Pending;
+            // Kiểm tra voucher nếu có
+            if (orderDto.VoucherId.HasValue)
+            {
+                var voucher = await _voucherRepo.GetByIdAsync(orderDto.VoucherId.Value);
+                if (voucher == null)
+                    throw new InvalidOperationException("Voucher not found.");
 
+                if (voucher.ValidTo < DateTime.UtcNow)
+                    throw new InvalidOperationException("Voucher is expired.");
+
+                // Tính toán total price sau khi giảm giá voucher
+                decimal discountValue = voucher.DiscountValue;
+                if (order.TotalPrice < discountValue)
+                    order.TotalPrice = 0;  // Nếu DiscountValue lớn hơn TotalPrice, set TotalPrice = 0
+                else
+                    order.TotalPrice -= discountValue;
+
+                // Đặt trạng thái voucher là Expired sau khi sử dụng
+                voucher.VoucherStatus = VoucherStatus.Expired;
+                await _voucherRepo.UpdateAsync(voucher);
+            }
+
+            order.OrderStatus = OrderStatus.Pending;  // Đặt trạng thái đơn hàng là Pending
             await _orderRepo.AddAsync(order);
         }
 
@@ -59,8 +83,7 @@ namespace Retech.Application.Services
             await _productRepo.UpdateAsync(product);
 
             order.OrderStatus = OrderStatus.Approved;
-            order.TotalPrice = order.Quantity * order.UnitPrice;
-            await _orderRepo.UpdateAsync(order);
+
 
             var transaction = new Transaction
             {
@@ -112,12 +135,25 @@ namespace Retech.Application.Services
                 product.Stock += order.Quantity;
                 await _productRepo.UpdateAsync(product);
             }
-
+            // Cập nhật trạng thái của transaction thành Canceled
             transaction.TransactionStatus = TransactionStatus.Canceled;
             await _transactionRepo.UpdateAsync(transaction);
-
+            // Cập nhật trạng thái của đơn hàng thành Canceled
             order.OrderStatus = OrderStatus.Canceled;
             await _orderRepo.UpdateAsync(order);
+            // Nếu voucher có, khôi phục trạng thái voucher thành Active
+            if (order.VoucherId.HasValue)
+            {
+                var voucher = await _voucherRepo.GetByIdAsync(order.VoucherId.Value);
+                if (voucher != null)
+                {
+                    voucher.VoucherStatus = VoucherStatus.Active;  // Khôi phục lại voucher thành Active
+                    await _voucherRepo.UpdateAsync(voucher);
+                }
+            }
+
+
+
         }
     }
 }

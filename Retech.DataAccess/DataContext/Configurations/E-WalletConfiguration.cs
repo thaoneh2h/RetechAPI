@@ -21,15 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .IsRequired()
                    .HasColumnType("decimal(18, 2)");  // Ensuring precision for balance
 
-            builder.Property(w => w.Currency)
-                   .IsRequired()
-                   .HasMaxLength(3);  // Currency should be a 3-character code (e.g., VND, USD)
-
-            builder.Property(w => w.Status)
-                   .IsRequired()
-                   .HasConversion<string>();  // Store enum as string in the database
-
-
             builder.Property(w => w.KycVerified)
                    .IsRequired();  // KYC verification status is required
 

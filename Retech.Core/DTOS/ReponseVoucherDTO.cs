@@ -1,24 +1,28 @@
 ﻿using Retech.Core.Models.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace Retech.Core.Models
+namespace Retech.Core.DTOS
 {
-    public class Voucher
+    public class ResponseVoucherDTO
     {
-        [Key]
         public Guid VoucherId { get; set; }
         [Required]
-        public Guid UserId { get; set; } // Người sở hữu voucher
+        public Guid UserId { get; set; }
         [Required]
         [StringLength(50)]
         public string VoucherCode { get; set; }
         [Range(0.01, double.MaxValue, ErrorMessage = "Discount value must be greater than 0.")]
-        public decimal DiscountValue { get; set; } // Giá trị giảm giá
+        public decimal DiscountValue { get; set; }
         public DateTime ValidTo { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         [EnumDataType(typeof(VoucherStatus))]
-        public VoucherStatus VoucherStatus { get; set; } // Enum: Active, Expired
-        // Relationships
-        public User User { get; set; }
-        public Order Order { get; set; }
+        public VoucherStatus VoucherStatus { get; set; }
+
     }
 }

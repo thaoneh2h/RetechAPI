@@ -40,6 +40,22 @@ namespace Retech.Core
             CreateMap<DeviceVerificationFormDTO, DeviceVerificationForm>();
             CreateMap<Category, CategoryDTO>().ReverseMap();
 
+            CreateMap<Voucher, VoucherDTO>();
+            CreateMap<VoucherDTO, Voucher>();
+            CreateMap<Voucher, ResponseVoucherDTO>().ReverseMap();
+
+            CreateMap<E_Wallet, E_WalletDTO>();
+
+            CreateMap<E_WalletDTO, E_Wallet>();
+
+            CreateMap<E_Wallet, ResponseWalletDTO>();
+
+            CreateMap<ResponseWalletDTO, E_Wallet>();
+
+
+
+
+
         }
     }
 }

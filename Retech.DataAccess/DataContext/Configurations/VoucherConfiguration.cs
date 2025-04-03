@@ -21,9 +21,6 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
 
-            builder.Property(v => v.ValidFrom)
-                .IsRequired();
-
             builder.Property(v => v.ValidTo)
                 .IsRequired();
 
