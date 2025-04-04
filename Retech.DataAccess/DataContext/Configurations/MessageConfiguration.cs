@@ -35,6 +35,9 @@ namespace Retech.DataAccess.DataContext.Configurations
                    .HasForeignKey(m => m.ReceiverId)
                    .OnDelete(DeleteBehavior.Restrict);  // Prevent delete of Receiver if messages exist
 
+            builder.HasOne(m => m.ExchangeRequest)
+                  .WithMany(e => e.Messages)
+                  .HasForeignKey(m => m.ExchangeRequestId);
 
             // Table name
             builder.ToTable("Message");

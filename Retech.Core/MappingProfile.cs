@@ -53,7 +53,7 @@ namespace Retech.Core
             CreateMap<ResponseWalletDTO, E_Wallet>();
 
 
-
+            CreateMap<ExchangeRequest, ExchangeRequestDTO>();
 
 
         }

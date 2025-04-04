@@ -13,6 +13,7 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Retech.Service;
 using Footprint.Application.Services.Implementations;
+using Retech.API.Hubs;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,9 +75,12 @@ builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IExchangeRequestService, ExchangeRequestService>();
+builder.Services.AddScoped<IExchangeRequestRepository, ExchangeRequestRepository>();
 
 
-
+builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -106,5 +110,7 @@ app.UseAuthentication(); // Đảm bảo sử dụng Authentication
 app.UseAuthorization();  // Đảm bảo sử dụng Authorization
 
 app.MapControllers(); // Ánh xạ các controller
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

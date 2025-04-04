@@ -8,11 +8,12 @@ namespace Retech.Core.Models
         public Guid MessageId { get; set; }
         public Guid SenderId { get; set; }
         public Guid ReceiverId { get; set; }
+        public Guid ExchangeRequestId { get; set; }
         public string Content { get; set; }
         public DateTime SendDate { get; set; } = DateTime.UtcNow;
         // Relationships
         public User Sender { get; set; }  // Mối quan hệ với người gửi
         public User Receiver { get; set; }  // Mối quan hệ với người nhận
-
+        public ExchangeRequest ExchangeRequest { get; set; }
     }
 }
