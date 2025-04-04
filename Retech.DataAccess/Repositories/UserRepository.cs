@@ -22,26 +22,8 @@ public class UserRepository : IUserRepository
     public async Task<User> GetByEmailAsync(string email)
     {
         return await _context.User
-        .Where(u => u.Email == email)
-        .Select(u => new User
-        {
-            UserId = u.UserId,
-            Email = u.Email,
-            Password = u.Password,
-            UserRole = u.UserRole,
-            UserName = u.UserName,
-            PhoneNumber = u.PhoneNumber,
-            Address = u.Address,
-            Gender = u.Gender,
-            BirthDate = u.BirthDate,
-            ProfilePicture = u.ProfilePicture,
-            RegistrationDate = u.RegistrationDate,
-            UserStatus = u.UserStatus,
-            Rating = u.Rating,
-            KycVerified = u.KycVerified
-        })
         .AsNoTracking()
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync(u => u.Email == email);
     }
 }
 
