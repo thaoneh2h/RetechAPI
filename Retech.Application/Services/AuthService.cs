@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Retech.Application.Services
 {
-    class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
@@ -22,6 +22,10 @@ namespace Retech.Application.Services
 
         public async Task<AuthResponseDTO> RegisterAsync(UserRegisterDTO dto)
         {
+            var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
+            if (existingUser != null)
+                throw new Exception("Email already registered.");
+
             var user = new User
             {
                 UserId = Guid.NewGuid(),
@@ -30,7 +34,9 @@ namespace Retech.Application.Services
                 UserName = dto.UserName,
                 PhoneNumber = dto.PhoneNumber,
                 UserRole = "Seller", // Default role
-                RegistrationDate = DateTime.UtcNow
+                RegistrationDate = DateTime.UtcNow,
+                UserStatus = "Active",
+                KycVerified = false
             };
 
             await _userRepository.AddAsync(user);
@@ -48,7 +54,7 @@ namespace Retech.Application.Services
 
         private AuthResponseDTO GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]

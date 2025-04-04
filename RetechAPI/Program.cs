@@ -12,7 +12,7 @@ using Retech.DataAccess.Repositories.Interfaces;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Retech.Service;
-using Footprint.Application.Services.Implementations;
+using Retech.DataAccess.Repositories.Implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,12 +21,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Thêm AutoMapper vào DI container
 builder.Services.AddAutoMapper(typeof(MappingProfile)); // Cấu hình AutoMapper sử dụng profile MappingProfile
+
 // **Cấu hình JWT từ appsettings.json**
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
+if (string.IsNullOrEmpty(secretKey))
+    throw new Exception("JWT SecretKey is missing in appsettings.json");
 var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
-var expirationInMinutes = int.Parse(jwtSettings["ExpirationInMinutes"]);
 
 // **Cấu hình JWT Authentication**
 builder.Services.AddAuthentication(options =>
@@ -45,15 +47,18 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-        ClockSkew = TimeSpan.Zero,  // Giới hạn thời gian hết hạn token
         ValidIssuer = issuer,
-        ValidAudience = audience
+        ValidAudience = audience,
+        ClockSkew = TimeSpan.Zero
     };
 });
 
-// **Thêm các dịch vụ khác vào container**
+// Cấu hình DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Cấu hình AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -73,9 +78,7 @@ builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 builder.Services.AddControllers()
@@ -88,6 +91,23 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Retech API", Version = "v1" });
     c.UseInlineDefinitionsForEnums(); // 👈 Phần quan trọng giúp enum hiển thị dưới dạng string
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Nhập JWT token: Bearer {your token}",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            new string[] {}
+        }
+    });
 });
 // Swagger UI
 
@@ -101,10 +121,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection(); // Đảm bảo chỉ sử dụng https
-
-app.UseAuthentication(); // Đảm bảo sử dụng Authentication
-app.UseAuthorization();  // Đảm bảo sử dụng Authorization
+app.UseAuthentication();  // <- bắt buộc trước Authorization
+app.UseAuthorization();
 
 app.MapControllers(); // Ánh xạ các controller
-
 app.Run();
