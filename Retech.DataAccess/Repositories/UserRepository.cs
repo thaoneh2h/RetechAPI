@@ -4,7 +4,7 @@ using Retech.DataAccess.DataContext;
 using Retech.DataAccess.Repositories.Interfaces;
 
 namespace Retech.DataAccess.Repositories.Implementations;
-    public class UserRepository : IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _context;
 
@@ -21,7 +21,27 @@ namespace Retech.DataAccess.Repositories.Implementations;
 
     public async Task<User> GetByEmailAsync(string email)
     {
-        return await _context.User.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.User
+        .Where(u => u.Email == email)
+        .Select(u => new User
+        {
+            UserId = u.UserId,
+            Email = u.Email,
+            Password = u.Password,
+            UserRole = u.UserRole,
+            UserName = u.UserName,
+            PhoneNumber = u.PhoneNumber,
+            Address = u.Address,
+            Gender = u.Gender,
+            BirthDate = u.BirthDate,
+            ProfilePicture = u.ProfilePicture,
+            RegistrationDate = u.RegistrationDate,
+            UserStatus = u.UserStatus,
+            Rating = u.Rating,
+            KycVerified = u.KycVerified
+        })
+        .AsNoTracking()
+        .FirstOrDefaultAsync();
     }
 }
 

@@ -8,8 +8,8 @@ namespace Retech.Core.Models
         public Guid UserId { get; set; }
         public string? UserRole { get; set; }  // Enum: Buyer, Seller, Exchange Staff, Admin
         public string? UserName { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string? Gender { get; set; }  // Enum: Male, Female, Other
@@ -17,7 +17,7 @@ namespace Retech.Core.Models
         public string? ProfilePicture { get; set; }
         public DateTime RegistrationDate { get; set; }
         public string? UserStatus { get; set; }  // Enum: Active, Suspended
-        public float Rating { get; set; } = 0;
+        public float Rating { get; set; } = 0f;
         public bool KycVerified { get; set; } = false;
 
         // Relationships
