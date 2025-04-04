@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Retech.Core\Retech.Core.csproj" />
-    <ProjectReference Include="..\Retech.Shared\Retech.Shared.csproj" />
   </ItemGroup>
 
 </Project>

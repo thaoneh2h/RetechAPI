@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Retech.DataAccess\Retech.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
