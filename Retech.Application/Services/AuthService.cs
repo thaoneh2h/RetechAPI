@@ -36,7 +36,6 @@ namespace Retech.Application.Services
                 UserRole = "Seller", // Default role
                 RegistrationDate = DateTime.UtcNow,
                 UserStatus = "Active",
-                Rating = 0f,
                 KycVerified = false
             };
 

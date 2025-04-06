@@ -36,8 +36,7 @@ namespace Retech.DataAccess.DataContext.Configurations
                 .HasMaxLength(255);
 
             builder.Property(u => u.Gender)
-                .HasMaxLength(10)
-                .IsRequired();
+                .HasMaxLength(10);
 
             builder.Property(u => u.ProfilePicture)
                 .HasMaxLength(255);
@@ -48,11 +47,6 @@ namespace Retech.DataAccess.DataContext.Configurations
             builder.Property(u => u.UserStatus)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            builder.Property(u => u.Rating)
-                .HasColumnType("float")
-                .HasDefaultValue(0);
-
 
             builder.Property(u => u.KycVerified)
                 .HasDefaultValue(false);
