@@ -33,7 +33,7 @@ namespace Retech.Application.Services
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 UserName = dto.UserName,
                 PhoneNumber = dto.PhoneNumber,
-                UserRole = "Seller", // Default role
+                UserRole = "Customer", // Default role
                 RegistrationDate = DateTime.UtcNow,
                 UserStatus = "Active",
                 KycVerified = false
