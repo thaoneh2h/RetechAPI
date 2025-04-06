@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Retech.Application.Services.Interfaces;
 using Retech.Core.DTOS;
 using Retech.Core.Models;
 using Retech.DataAccess.Repositories.Interfaces;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Retech.Application.Services;
 
-public class UserAddressService
+public class UserAddressService : IUserAddressService
 {
     private readonly IUserAddressRepository _repository;
     private readonly IMapper _mapper;

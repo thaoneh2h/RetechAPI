@@ -8,7 +8,7 @@ namespace Retech.API.Controllers
     [ApiController]
     public class UserAddressController : ControllerBase
     {
-        private readonly IUserAddressService _useraddressservice;
+        private IUserAddressService _useraddressservice;
 
         public UserAddressController(IUserAddressService useraddressservice)
         {

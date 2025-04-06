@@ -9,7 +9,7 @@ namespace Retech.Core.DTOS;
 
 public class UserAddressDTO
 {
-    public Guid UserAddressId { get; set; }
+    public Guid? UserAddressId { get; set; }
 
     [Required]
     public Guid UserId { get; set; }

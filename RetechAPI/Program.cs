@@ -79,7 +79,8 @@ builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IUserAddressService, UserAddressService>();
+builder.Services.AddScoped<IUserAddressRepository, UserAddressRepository>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
