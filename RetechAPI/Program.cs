@@ -1,17 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
+using Retech.API.Hubs;
 using Retech.Application.Services;
-using Retech.DataAccess.Repositories;
-using Retech.DataAccess.DataContext;
+using Retech.Application.Services.Interfaces;
 using Retech.Core;
 using Retech.Core.Services;
-using Retech.Application.Services.Interfaces;
+using Retech.DataAccess.DataContext;
+using Retech.DataAccess.Repositories;
 using Retech.DataAccess.Repositories.Interfaces;
-using System.Text.Json.Serialization;
-using Microsoft.OpenApi.Models;
 using Retech.Service;
+using System.Text;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,7 +71,12 @@ builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IExchangeRequestService, ExchangeRequestService>();
+builder.Services.AddScoped<IExchangeRequestRepository, ExchangeRequestRepository>();
 
+
+builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -100,5 +106,7 @@ app.UseAuthentication(); // Đảm bảo sử dụng Authentication
 app.UseAuthorization();  // Đảm bảo sử dụng Authorization
 
 app.MapControllers(); // Ánh xạ các controller
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
