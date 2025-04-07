@@ -13,6 +13,7 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Retech.Service;
 using Retech.DataAccess.Repositories.Implementations;
+using System.Security.Claims;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,7 +50,9 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
         ValidIssuer = issuer,
         ValidAudience = audience,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+
+        RoleClaimType = ClaimTypes.Role
     };
 });
 
@@ -81,6 +84,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserAddressService, UserAddressService>();
 builder.Services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
