@@ -5,9 +5,9 @@ namespace Retech.Application.Services;
 
 public interface IAdminService
 {
-    Task<IEnumerable<User>> GetAllUsersAsync(string? role = null);
-    Task<User> GetUserByIdAsync(Guid userId);
-    Task<User> CreateUserAsync(User user);
-    Task<User> UpdateUserAsync(Guid userId, User updatedUser);
+    Task<IEnumerable<UserDTO>> GetAllUsersAsync(string? role = null);
+    Task<UserDTO> GetUserByIdAsync(Guid userId);
+    Task<UserDTO> CreateUserAsync(UserDTO userDto);
+    Task<UserDTO> UpdateUserAsync(Guid userId, UserDTO updatedUserDto);
     Task<bool> DeleteUserAsync(Guid userId);
 }
