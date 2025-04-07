@@ -8,7 +8,6 @@ namespace Retech.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
 public class AdminController : ControllerBase
 {
     private readonly IAdminService _adminService;
@@ -18,14 +17,21 @@ public class AdminController : ControllerBase
         _adminService = adminService;
     }
 
-    [HttpGet("users/")] //get user role
+    [HttpGet("users/getalluser")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _adminService.GetAllUsersAsync(null);
+        return Ok(users);
+    }
+
+    [HttpGet("users/getbyrole")]
     public async Task<IActionResult> GetAllUsers([FromQuery] string? role)
     {
         var users = await _adminService.GetAllUsersAsync(role);
         return Ok(users);
     }
 
-    [HttpGet("users/{id}")]
+    [HttpGet("users/getbyid/{id}")]
     public async Task<IActionResult> GetUserById(Guid id)
     {
         var user = await _adminService.GetUserByIdAsync(id);

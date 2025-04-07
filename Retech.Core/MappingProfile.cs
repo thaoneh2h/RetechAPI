@@ -44,6 +44,8 @@ namespace Retech.Core
 
             CreateMap<UserAddress, UserAddressDTO>().ReverseMap();
 
+            CreateMap<User, UserDTO>().ReverseMap(); //
+
             CreateMap<Voucher, VoucherDTO>();
             CreateMap<VoucherDTO, Voucher>();
             CreateMap<Voucher, ResponseVoucherDTO>().ReverseMap();
