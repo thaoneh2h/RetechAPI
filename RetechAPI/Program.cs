@@ -16,6 +16,10 @@ using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
 
 // Add services to the container.
 // Thêm AutoMapper vào DI container
@@ -92,6 +96,9 @@ builder.Services.AddSwaggerGen(c =>
 // Swagger UI
 
 var app = builder.Build();
+
+
+app.UseHealthChecks("/health");
 
 // **Cấu hình HTTP request pipeline**
 if (app.Environment.IsDevelopment())
