@@ -103,8 +103,8 @@ app.UseHealthChecks("/health");
 // **Cấu hình HTTP request pipeline**
 //if (app.Environment.IsDevelopment())
 //{
-//    app.UseSwagger(); // Sử dụng Swagger trong môi trường phát triển
-//    app.UseSwaggerUI(); // Sử dụng Swagger UI
+   app.UseSwagger(); // Sử dụng Swagger trong môi trường phát triển
+    app.UseSwaggerUI(); // Sử dụng Swagger UI
 //}
 
 app.UseHttpsRedirection(); // Đảm bảo chỉ sử dụng https
