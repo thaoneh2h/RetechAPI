@@ -15,7 +15,6 @@ namespace Retech.Core.Models
         // Relationships
         public User Reviewer { get; set; }
         public User Reviewee { get; set; }
-        
         public Order Order { get; set; }
     }
 }

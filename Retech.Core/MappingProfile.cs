@@ -67,6 +67,13 @@ namespace Retech.Core
             CreateMap<UpdateUserDTO, User>()
             .ForMember(dest => dest.Password, opt => opt.Ignore()) // Không cho phép update password qua đây
             .ForMember(dest => dest.Email, opt => opt.Ignore()); // Giữ nguyên email, không cho update
+
+            CreateMap<Review, ReviewDTO>()
+            .ForMember(dest => dest.ReviewerName, opt => opt.MapFrom(src => src.Reviewer.UserName))
+            .ForMember(dest => dest.RevieweeName, opt => opt.MapFrom(src => src.Reviewee.UserName));
+
+            CreateMap<CreateReviewDTO, Review>();
+            CreateMap<UpdateReviewDTO, Review>();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Retech.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize(Roles = "Admin")] //authorize only admin users
+[Authorize(Roles = "Admin")] //authorize only admin users
 public class AdminController : ControllerBase
 {
     private readonly IAdminService _adminService;
