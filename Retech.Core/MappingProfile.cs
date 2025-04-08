@@ -59,9 +59,14 @@ namespace Retech.Core
             CreateMap<ResponseWalletDTO, E_Wallet>();
 
 
+            CreateMap<CreateUserDTO, User>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore()) // Sẽ xử lý password riêng
+            .ForMember(dest => dest.UserId, opt => opt.Ignore()) // Không map từ DTO
+            .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore()); // Sẽ set trong service
 
-
-
+            CreateMap<UpdateUserDTO, User>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore()) // Không cho phép update password qua đây
+            .ForMember(dest => dest.Email, opt => opt.Ignore()); // Giữ nguyên email, không cho update
         }
     }
 }

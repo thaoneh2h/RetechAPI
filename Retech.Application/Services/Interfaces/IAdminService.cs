@@ -7,7 +7,7 @@ public interface IAdminService
 {
     Task<IEnumerable<UserDTO>> GetAllUsersAsync(string? role = null);
     Task<UserDTO> GetUserByIdAsync(Guid userId);
-    Task<UserDTO> CreateUserAsync(UserDTO userDto);
-    Task<UserDTO> UpdateUserAsync(Guid userId, UserDTO updatedUserDto);
+    Task<UserDTO> CreateUserAsync(CreateUserDTO userDto);
+    Task<UserDTO> UpdateUserAsync(Guid userId, UpdateUserDTO updatedUserDto);
     Task<bool> DeleteUserAsync(Guid userId);
 }

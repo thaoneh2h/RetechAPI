@@ -8,6 +8,7 @@ namespace Retech.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+//[Authorize(Roles = "Admin")] //authorize only admin users
 public class AdminController : ControllerBase
 {
     private readonly IAdminService _adminService;
@@ -40,18 +41,18 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost("users")]
-    public async Task<IActionResult> CreateUser([FromBody] User user)
+    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserDTO userDto)
     {
-        var newUser = await _adminService.CreateUserAsync(user);
+        var newUser = await _adminService.CreateUserAsync(userDto);
         return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserId }, newUser);
     }
 
     [HttpPut("users/{id}")]
-    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] User updatedUser)
+    public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UpdateUserDTO updatedUserDto)
     {
         try
         {
-            var user = await _adminService.UpdateUserAsync(id, updatedUser);
+            var user = await _adminService.UpdateUserAsync(id, updatedUserDto);
             return Ok(user);
         }
         catch (Exception ex)
