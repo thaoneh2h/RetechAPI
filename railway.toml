@@ -5,3 +5,4 @@ dockerfilePath = "./RetechAPI/Dockerfile"
 [deploy]
 startCommand = "./Retech.API"
 restartPolicyType = "always"
+healthcheckPath = "/health"
