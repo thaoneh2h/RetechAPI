@@ -3,6 +3,6 @@ builder = "dockerfile"
 dockerfilePath = "./RetechAPI/Dockerfile"
 
 [deploy]
-startCommand = "./RetechAPI"
+startCommand = "./Retech.API"
 restartPolicyType = "always"
 healthcheckPath = "/health"
